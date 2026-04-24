@@ -1,6 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "../core/guards/ProtectedRoute";
 
+/* LAYOUT */
+import DashboardLayout from "../layout/DashboardLayout";
+
 /* DASHBOARDS */
 import LawyerDashboard from "../modules/admin/Dashboard";
 import AssistantDashboard from "../modules/assistant/Dashboard";
@@ -17,42 +20,48 @@ import ClientSignup from "../modules/public/signup/ClientSignup";
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* ================= PUBLIC ================= */}
+      {/* PUBLIC */}
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/signup/client" element={ClientSignup} />
+      <Route path="/signup/client" element={<ClientSignup />} />
 
-      {/* ================= LAWYER ================= */}
+      {/* LAWYER */}
       <Route
         path="/lawyer/dashboard"
         element={
           <ProtectedRoute allowedRoles={["LAWYER"]}>
-            <LawyerDashboard />
+            <DashboardLayout>
+              <LawyerDashboard />
+            </DashboardLayout>
           </ProtectedRoute>
         }
       />
 
-      {/* ================= ASSISTANT ================= */}
+      {/* ASSISTANT */}
       <Route
         path="/assistant/dashboard"
         element={
           <ProtectedRoute allowedRoles={["ASSISTANT"]}>
-            <AssistantDashboard />
+            <DashboardLayout>
+              <AssistantDashboard />
+            </DashboardLayout>
           </ProtectedRoute>
         }
       />
 
-      {/* ================= CLIENT ================= */}
+      {/* CLIENT */}
       <Route
         path="/client/dashboard"
         element={
           <ProtectedRoute allowedRoles={["CLIENT"]}>
-            <ClientDashboard />
+            <DashboardLayout>
+              <ClientDashboard />
+            </DashboardLayout>
           </ProtectedRoute>
         }
       />
 
-      {/* ================= SAFETY NET ================= */}
+      {/* FALLBACK */}
       <Route path="/unauthorized" element={<Unauthorized />} />
     </Routes>
   );

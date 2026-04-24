@@ -9,28 +9,30 @@ export default {
       colors: {
         /* ===============================
            LIGHT THEME PALETTE
+           Executive Navy + Gold + Clean UI
         =============================== */
         brand: {
-          primary: "#1B5E20", // deep legal green
-          secondary: "#A7C4A0", // muted soft green
-          accent: "#C2A878", // refined legal gold
-          warning: "#D97706", // toned-down orange
+          primary: "#0F172A", // deep executive navy
+          secondary: "#334155", // slate blue / sidebar / panels
+          accent: "#C9A227", // prestige legal gold
+          warning: "#D97706", // deadline / caution amber
         },
 
         /* ===============================
            DARK THEME PALETTE
+           Premium Chambers Feel
         =============================== */
         darkbrand: {
-          base: "#081C15", // deep green-black (NOT pure black)
-          surface: "#0F2A20", // dark green surface
-          text: "#E6F4EA", // soft readable light green
+          base: "#020617", // rich black navy
+          surface: "#111827", // dark slate surface
+          text: "#E5E7EB", // soft readable white
         },
 
         /* ===============================
            UNIVERSAL UI TOKENS
         =============================== */
         ui: {
-          border: "#D1D5DB",
+          border: "#E5E7EB",
           muted: "#6B7280",
           success: "#16A34A",
           danger: "#DC2626",
@@ -50,10 +52,10 @@ export default {
          SHADOWS (Luxury UI Feel)
       =============================== */
       boxShadow: {
-        soft: "0 4px 14px rgba(0,0,0,0.06)",
-        card: "0 10px 25px rgba(0,0,0,0.08)",
-        glow: "0 0 0 3px rgba(167,196,160,0.25)",
-        darkcard: "0 10px 30px rgba(0,0,0,0.5)",
+        soft: "0 4px 14px rgba(15,23,42,0.08)",
+        card: "0 10px 25px rgba(15,23,42,0.10)",
+        glow: "0 0 0 3px rgba(201,162,39,0.22)",
+        darkcard: "0 10px 30px rgba(0,0,0,0.55)",
       },
 
       /* ===============================
@@ -70,16 +72,16 @@ export default {
       =============================== */
       backgroundImage: {
         "hero-light":
-          "linear-gradient(135deg, #1B5E20 0%, #A7C4A0 45%, #C2A878 100%)",
+          "linear-gradient(135deg, #0F172A 0%, #334155 45%, #C9A227 100%)",
 
         "hero-dark":
-          "linear-gradient(135deg, #081C15 0%, #0F2A20 60%, #1B3A2F 100%)",
+          "linear-gradient(135deg, #020617 0%, #111827 60%, #1E293B 100%)",
 
         "card-light":
-          "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(246,248,246,1) 100%)",
+          "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,250,252,1) 100%)",
 
         "card-dark":
-          "linear-gradient(180deg, rgba(15,42,32,1) 0%, rgba(8,28,21,1) 100%)",
+          "linear-gradient(180deg, rgba(17,24,39,1) 0%, rgba(2,6,23,1) 100%)",
       },
 
       /* ===============================
@@ -97,8 +99,8 @@ export default {
         },
 
         pulseGlow: {
-          "0%,100%": { boxShadow: "0 0 0 0 rgba(167,196,160,0.35)" },
-          "50%": { boxShadow: "0 0 0 8px rgba(167,196,160,0)" },
+          "0%,100%": { boxShadow: "0 0 0 0 rgba(201,162,39,0.30)" },
+          "50%": { boxShadow: "0 0 0 8px rgba(201,162,39,0)" },
         },
       },
 

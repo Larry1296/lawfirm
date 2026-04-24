@@ -1,34 +1,24 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-
-/* SHARED UI */
 import Sidebar from "../components/shared/Sidebar";
 import Topbar from "../components/shared/Topbar";
 import Footer from "../components/shared/Footer";
 
-export default function DashboardLayout() {
-  const [collapsed, setCollapsed] = useState(false);
-
+export default function DashboardLayout({ children }) {
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-darkbrand-base">
-      {/* ================= SIDEBAR ================= */}
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+    <div className="min-h-screen grid grid-rows-[auto_1fr_auto] bg-gray-50 dark:bg-darkbrand-base">
+      {/* Topbar */}
+      <Topbar />
 
-      {/* ================= MAIN AREA ================= */}
-      <div className="flex flex-col flex-1">
-        {/* ================= TOPBAR ================= */}
-        <Topbar onToggleSidebar={() => setCollapsed(!collapsed)} />
+      {/* Middle section */}
+      <div className="flex min-h-0">
+        <aside className="w-64 border-r border-ui-border">
+          <Sidebar />
+        </aside>
 
-        {/* ================= PAGE CONTENT ================= */}
-        <main className="flex-1 p-4 md:p-6 max-w-dashboard mx-auto w-full">
-          <div className="animate-fadeIn">
-            <Outlet />
-          </div>
-        </main>
-
-        {/* ================= FOOTER ================= */}
-        <Footer />
+        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
       </div>
+
+      {/* Footer always visible */}
+      <Footer />
     </div>
   );
 }

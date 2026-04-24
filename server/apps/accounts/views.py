@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -30,9 +31,13 @@ class RegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()
 
+            refresh = RefreshToken.for_user(user)
+
             return Response({
                 "success": True,
                 "message": "Client registered successfully",
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
                 "user": UserSerializer(user).data
             }, status=status.HTTP_201_CREATED)
 
@@ -40,8 +45,6 @@ class RegisterView(APIView):
             "success": False,
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
-
-
 # =========================
 # LOGIN (JWT)
 # =========================

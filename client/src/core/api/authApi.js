@@ -9,16 +9,22 @@ export const loginUser = async (credentials) => {
 };
 
 /* =========================================
-   REGISTER (CLIENT SELF-SIGNUP)
+   REGISTER (CLIENT SELF SIGNUP)
 ========================================= */
 export const registerClient = async (payload) => {
   const { data } = await axios.post("/auth/register/", payload);
+
+  if (data.success) {
+    localStorage.setItem("access", data.access);
+    localStorage.setItem("refresh", data.refresh);
+    localStorage.setItem("user", JSON.stringify(data.user));
+  }
+
   return data;
 };
 
 /* =========================================
    CURRENT USER (SESSION BOOTSTRAP)
-   VERY IMPORTANT FOR AUTO LOGIN REFRESH
 ========================================= */
 export const getCurrentUser = async () => {
   const { data } = await axios.get("/auth/me/");
@@ -26,7 +32,7 @@ export const getCurrentUser = async () => {
 };
 
 /* =========================================
-   REFRESH TOKEN
+   REFRESH TOKEN (JWT)
 ========================================= */
 export const refreshToken = async (refresh) => {
   const { data } = await axios.post("/auth/token/refresh/", {
@@ -37,40 +43,51 @@ export const refreshToken = async (refresh) => {
 };
 
 /* =========================================
-   LOGOUT
-   (frontend + backend ready structure)
+   CREATE ASSISTANT (LAWYER ONLY)
+========================================= */
+export const createAssistant = async (payload) => {
+  const { data } = await axios.post("/auth/create-assistant/", payload);
+  return data;
+};
+
+/* =========================================
+   CREATE CLIENT (LAWYER / ASSISTANT)
+========================================= */
+export const createClient = async (payload) => {
+  const { data } = await axios.post("/auth/create-client/", payload);
+  return data;
+};
+
+/* =========================================
+   TOGGLE ASSISTANT PERMISSION
+========================================= */
+export const toggleAssistantPermission = async (userId) => {
+  const { data } = await axios.post(`/auth/toggle-assistant/${userId}/`);
+  return data;
+};
+
+/* =========================================
+   LIST ASSISTANTS
+========================================= */
+export const getAssistants = async () => {
+  const { data } = await axios.get("/auth/assistants/");
+  return data;
+};
+
+/* =========================================
+   LIST CLIENTS
+========================================= */
+export const getClients = async () => {
+  const { data } = await axios.get("/auth/clients/");
+  return data;
+};
+
+/* =========================================
+   LOGOUT (CLIENT SIDE ONLY)
 ========================================= */
 export const logoutUser = async () => {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
   localStorage.removeItem("user");
-
   return true;
-};
-
-/* =========================================
-   FORGOT PASSWORD
-========================================= */
-export const forgotPassword = async (email) => {
-  const { data } = await axios.post("/auth/forgot-password/", {
-    email,
-  });
-
-  return data;
-};
-
-/* =========================================
-   RESET PASSWORD
-========================================= */
-export const resetPassword = async (payload) => {
-  const { data } = await axios.post("/auth/reset-password/", payload);
-  return data;
-};
-
-/* =========================================
-   VERIFY EMAIL
-========================================= */
-export const verifyEmail = async (payload) => {
-  const { data } = await axios.post("/auth/verify-email/", payload);
-  return data;
 };

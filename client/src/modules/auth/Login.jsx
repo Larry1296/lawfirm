@@ -13,6 +13,7 @@ export default function Login() {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -26,11 +27,11 @@ export default function Login() {
 
       if (res.success) {
         login(res);
-
         navigate(redirectByRole(res.user.role));
       }
     } catch (err) {
-      setError("Invalid email or password", err);
+      setError("Invalid email or password");
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -43,27 +44,46 @@ export default function Login() {
           Legal System Login
         </h1>
 
-        {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
+        {error && (
+          <div className="mb-4 text-sm text-red-500 font-medium">{error}</div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* EMAIL */}
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-brand-secondary outline-none"
+            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-brand-secondary outline-none dark:bg-darkbrand-base dark:text-darkbrand-text"
+            value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-brand-secondary outline-none"
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
+          {/* PASSWORD WITH TOGGLE */}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="w-full p-3 pr-16 rounded-xl border focus:ring-2 focus:ring-brand-secondary outline-none dark:bg-darkbrand-base dark:text-darkbrand-text"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+            />
 
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium text-ui-muted hover:text-brand-primary transition"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+
+          {/* SUBMIT */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-brand-primary text-white py-3 rounded-xl hover:opacity-90 transition"
+            className="w-full bg-brand-primary text-white py-3 rounded-xl hover:opacity-90 transition disabled:opacity-60"
           >
             {loading ? "Logging in..." : "Login"}
           </button>

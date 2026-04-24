@@ -9,7 +9,7 @@ const api = axios.create({
 });
 
 /* ================================
-   REQUEST: attach access token
+   REQUEST INTERCEPTOR
 ================================ */
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access");
@@ -22,21 +22,28 @@ api.interceptors.request.use((config) => {
 });
 
 /* ================================
-   RESPONSE: auto refresh logic
+   RESPONSE INTERCEPTOR (AUTO REFRESH)
 ================================ */
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // token expired
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // prevent infinite retry loops
+    if (originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    // only handle unauthorized
+    if (error.response?.status === 401) {
       originalRequest._retry = true;
 
       try {
         const refresh = localStorage.getItem("refresh");
 
-        if (!refresh) throw new Error("No refresh token");
+        if (!refresh) {
+          throw new Error("Missing refresh token");
+        }
 
         const res = await refreshToken(refresh);
 
@@ -45,18 +52,30 @@ api.interceptors.response.use(
         // store new access token
         localStorage.setItem("access", newAccess);
 
-        // update header
-        api.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
+        // update axios header globally
+        api.defaults.headers.common.Authorization = `Bearer ${newAccess}`;
 
-        originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+        // retry original request with new token
+        originalRequest.headers.Authorization = `Bearer ${newAccess}`;
 
-        // retry original request
         return api(originalRequest);
       } catch (err) {
-        console.error(err);
-        // refresh failed → logout user
+        console.error("Token refresh failed:", err);
+
+        // preserve navigation intent
+        const currentPath = window.location.pathname;
+
+        if (currentPath !== "/login") {
+          sessionStorage.setItem("redirectAfterLogin", currentPath);
+        }
+
+        // clean session
         localStorage.clear();
+
+        // redirect to login
         window.location.href = "/login";
+
+        return Promise.reject(err);
       }
     }
 

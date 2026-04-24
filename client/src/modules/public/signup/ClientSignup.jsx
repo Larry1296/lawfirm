@@ -36,27 +36,43 @@ export default function ClientSignup() {
       return;
     }
 
-    setLoading(true);
-
     try {
+      setLoading(true);
+
       const payload = {
-        full_name: form.full_name,
         email: form.email,
+        password: form.password,
+        full_name: form.full_name,
         national_id: form.national_id,
         phone_number: form.phone_number,
-        password: form.password,
       };
 
-      // ✅ USING AUTH API (correct way)
       const res = await registerClient(payload);
 
       if (res.success) {
-        navigate("/login");
+        // ===============================
+        // AUTO LOGIN STORAGE (IF BACKEND RETURNS TOKENS)
+        // ===============================
+        if (res.access && res.refresh) {
+          localStorage.setItem("access", res.access);
+          localStorage.setItem("refresh", res.refresh);
+          localStorage.setItem("user", JSON.stringify(res.user));
+        }
+
+        // ===============================
+        // REDIRECT LOGIC
+        // ===============================
+        navigate("/client/dashboard");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed. Please try again.",
-      );
+      console.error(err);
+
+      const message =
+        err.response?.data?.errors ||
+        err.response?.data?.message ||
+        "Registration failed";
+
+      setError(message);
     } finally {
       setLoading(false);
     }

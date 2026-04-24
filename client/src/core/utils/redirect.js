@@ -1,15 +1,12 @@
 export const redirectByRole = (role) => {
   switch (role) {
-    case "admin":
-      return "/admin/dashboard";
-
-    case "lawyer":
+    case "LAWYER":
       return "/lawyer/dashboard";
 
-    case "assistant":
+    case "ASSISTANT":
       return "/assistant/dashboard";
 
-    case "client":
+    case "CLIENT":
       return "/client/dashboard";
 
     default:
