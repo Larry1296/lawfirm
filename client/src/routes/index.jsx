@@ -1,68 +1,36 @@
-import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "../core/guards/ProtectedRoute";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-/* LAYOUT */
-import DashboardLayout from "../layout/DashboardLayout";
+import ClientLayout from "../layouts/ClientLayout";
 
-/* DASHBOARDS */
-import LawyerDashboard from "../modules/admin/Dashboard";
-import AssistantDashboard from "../modules/assistant/Dashboard";
-import ClientDashboard from "../modules/client/Dashboard";
-
-/* AUTH */
-import Login from "../modules/auth/Login";
-import Unauthorized from "../modules/auth/Unauthorized";
-
-/* PUBLIC */
-import HomePage from "../modules/public/HomePage";
-import ClientSignup from "../modules/public/signup/ClientSignup";
+// CLIENT PAGES
+import ClientDashboard from "../modules/client/ClientDashboard";
+import ClientCases from "../modules/client/ClientCases";
+import ClientCaseTracking from "../modules/client/ClientCaseTracking";
+import ClientCourtSession from "../modules/client/ClientCourtSession";
+import ClientChat from "../modules/client/ClientChat";
+import ClientNotifications from "../modules/client/ClientNotifications";
+import ClientProfile from "../modules/client/ClientProfile";
+import ClientSettings from "../modules/client/ClientSettings";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* PUBLIC */}
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup/client" element={<ClientSignup />} />
-
-      {/* LAWYER */}
-      <Route
-        path="/lawyer/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["LAWYER"]}>
-            <DashboardLayout>
-              <LawyerDashboard />
-            </DashboardLayout>
-          </ProtectedRoute>
-        }
-      />
-
-      {/* ASSISTANT */}
-      <Route
-        path="/assistant/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["ASSISTANT"]}>
-            <DashboardLayout>
-              <AssistantDashboard />
-            </DashboardLayout>
-          </ProtectedRoute>
-        }
-      />
+      {/* DEFAULT */}
+      <Route path="/" element={<Navigate to="/client/dashboard" />} />
 
       {/* CLIENT */}
-      <Route
-        path="/client/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["CLIENT"]}>
-            <DashboardLayout>
-              <ClientDashboard />
-            </DashboardLayout>
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/client" element={<ClientLayout />}>
+        <Route path="dashboard" element={<ClientDashboard />} />
 
-      {/* FALLBACK */}
-      <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="cases" element={<ClientCases />} />
+        <Route path="cases/tracking" element={<ClientCaseTracking />} />
+        <Route path="cases/court-session" element={<ClientCourtSession />} />
+        <Route path="cases/chat" element={<ClientChat />} />
+        <Route path="cases/notifications" element={<ClientNotifications />} />
+
+        <Route path="profile" element={<ClientProfile />} />
+        <Route path="settings" element={<ClientSettings />} />
+      </Route>
     </Routes>
   );
 }

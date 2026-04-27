@@ -14,6 +14,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(','
 
 # APPLICATIONS
 INSTALLED_APPS = [
+    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,7 +91,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTHENTICATION_BACKENDS = [
-    'apps.accounts.auth_backend.EmailBackend',
+    'apps.accounts.auth_backend.EmailBackend', # To explicitly tell django to authenticate using email and password
 ]
 
 # INTERNATIONALIZATION
