@@ -9,3 +9,7 @@
 html.dark {
   @apply bg-darkbrand-base text-darkbrand-text;
 } */
+/* 
+html {
+  scroll-behavior: smooth;
+} */

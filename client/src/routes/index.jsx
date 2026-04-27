@@ -33,12 +33,30 @@ import AdminCaseDetails from "../modules/admin/AdminCaseDetails";
 /* SHARED CHAT */
 import ChatPage from "../modules/chat/ChatPage";
 
+import PublicLayout from "../layouts/public/PublicLayout";
+import HomePage from "../modules/public/HomePage";
+
+import AuthLayout from "../layouts/public/AuthLayout";
+
+import Login from "../modules/public/pages/Login";
+import Register from "../modules/public/pages/Register";
+import ForgotPassword from "../modules/public/pages/ForgotPassword";
+import ResetPassword from "../modules/public/pages/ResetPassword";
+
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* DEFAULT */}
-      <Route path="/" element={<Navigate to="/client/dashboard" />} />
+      {/* Public Pages */}
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
 
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+      </Route>
       {/* ================= CLIENT ================= */}
       <Route path="/client" element={<ClientLayout />}>
         <Route path="dashboard" element={<ClientDashboard />} />
@@ -52,7 +70,6 @@ export default function AppRoutes() {
         <Route path="profile" element={<ClientProfile />} />
         <Route path="settings" element={<ClientSettings />} />
       </Route>
-
       {/* ================= ASSISTANT ================= */}
       <Route path="/assistant" element={<AssistantLayout />}>
         <Route path="dashboard" element={<AssistantDashboard />} />
@@ -66,7 +83,6 @@ export default function AppRoutes() {
         <Route path="scheduling" element={<AssistantScheduling />} />
         <Route path="onboarding" element={<AssistantOnboarding />} />
       </Route>
-
       {/* ============================Admin =========================================== */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboard />} />
