@@ -21,14 +21,24 @@ import AssistantCaseDetails from "../modules/assistant/AssistantCaseDetails";
 import AssistantScheduling from "../modules/assistant/AssistantScheduling";
 import AssistantOnboarding from "../modules/assistant/AssistantOnboarding";
 
-/* ================= ADMIN ================= */
+/* ================= ADMIN (FULL SYSTEM) ================= */
 import AdminLayout from "../layouts/admin/AdminLayout";
 
-import AdminDashboard from "../modules/admin/AdminDashboard";
-import AdminCases from "../modules/admin/AdminCases";
-import AdminUsers from "../modules/admin/AdminUsers";
-import AdminReports from "../modules/admin/AdminReports";
-import AdminCaseDetails from "../modules/admin/AdminCaseDetails";
+import AdminHomePageCustomization from "../modules/admin/homepage/AdminHomPageCustomization";
+import AdminDashboard from "../modules/admin/dashboard/AdminDashboard";
+import AdminCases from "../modules/admin/cases/AdminCases";
+import AdminCaseDetails from "../modules/admin/cases/AdminCaseDetails";
+import AdminClients from "../modules/admin/clients/AdminClients";
+import AdminStaff from "../modules/admin/staff/AdminStaff";
+import AdminCalendar from "../modules/admin/calendar/AdminCalendar";
+import AdminDocuments from "../modules/admin/documents/AdminDocuments";
+import AdminBilling from "../modules/admin/billing/AdminBilling";
+import AdminInvoices from "../modules/admin/billing/AdminInvoices";
+import AdminPayments from "../modules/admin/billing/AdminPayments";
+import AdminReports from "../modules/admin/reports/AdminReports";
+import AdminChat from "../modules/admin/communication/AdminChat";
+import AdminAuditLogs from "../modules/admin/compliance/AdminAuditLogs";
+import AdminSettings from "../modules/admin/settings/AdminSettings";
 
 /* SHARED CHAT */
 import ChatPage from "../modules/chat/ChatPage";
@@ -42,6 +52,7 @@ import Login from "../modules/public/pages/Login";
 import Register from "../modules/public/pages/Register";
 import ForgotPassword from "../modules/public/pages/ForgotPassword";
 import ResetPassword from "../modules/public/pages/ResetPassword";
+import AdminStaffDetails from "../modules/admin/staff/AdminStaffDetails";
 
 export default function AppRoutes() {
   return (
@@ -85,13 +96,47 @@ export default function AppRoutes() {
       </Route>
       {/* ============================Admin =========================================== */}
       <Route path="/admin" element={<AdminLayout />}>
+        {/* 1. Overview */}
         <Route path="dashboard" element={<AdminDashboard />} />
 
+        <Route
+          path="homepagecustomization"
+          element={<AdminHomePageCustomization />}
+        />
+
+        {/* 2. Cases */}
         <Route path="cases" element={<AdminCases />} />
         <Route path="cases/:caseId" element={<AdminCaseDetails />} />
 
-        <Route path="users" element={<AdminUsers />} />
+        {/* 3. Clients */}
+        <Route path="clients" element={<AdminClients />} />
+
+        {/* 4. Staff */}
+        <Route path="staff" element={<AdminStaff />} />
+        <Route path="staff/:staffId" element={<AdminStaffDetails />} />
+
+        {/* 5. Calendar */}
+        <Route path="calendar" element={<AdminCalendar />} />
+
+        {/* 6. Documents */}
+        <Route path="documents" element={<AdminDocuments />} />
+
+        {/* 7. Billing */}
+        <Route path="billing" element={<AdminBilling />} />
+        <Route path="billing/invoices" element={<AdminInvoices />} />
+        <Route path="billing/payments" element={<AdminPayments />} />
+
+        {/* 8. Reports */}
         <Route path="reports" element={<AdminReports />} />
+
+        {/* 9. Communication */}
+        <Route path="communication" element={<AdminChat />} />
+
+        {/* 10. Compliance */}
+        <Route path="compliance" element={<AdminAuditLogs />} />
+
+        {/* 11. Settings */}
+        <Route path="settings" element={<AdminSettings />} />
       </Route>
     </Routes>
   );

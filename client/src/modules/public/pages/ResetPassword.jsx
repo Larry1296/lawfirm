@@ -3,6 +3,9 @@ import { LockKeyhole, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+import Card from "../../../components/ui/Card";
+import Button from "../../../components/ui/Button";
+
 export default function ResetPassword() {
   const [show, setShow] = useState(false);
 
@@ -10,7 +13,7 @@ export default function ResetPassword() {
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* ================= LEFT SECTION ================= */}
       <div className="lg:w-1/2 bg-blue-700 relative overflow-hidden flex items-center justify-center p-10">
-        {/* Animated background blobs */}
+        {/* Animated blobs */}
         <motion.div
           animate={{ scale: [1, 1.2, 1], x: [0, 40, 0], y: [0, -30, 0] }}
           transition={{ duration: 8, repeat: Infinity }}
@@ -40,15 +43,15 @@ export default function ResetPassword() {
           </p>
 
           <div className="mt-10 border border-white/30 rounded-2xl p-6 text-sm text-white/80">
-            Your new password will replace the old one immediately after update
+            Your new password will replace the old one immediately after update.
           </div>
         </div>
       </div>
 
       {/* ================= RIGHT SECTION ================= */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-          {/* Back link */}
+      <div className="lg:w-1/2 bg-orange-50 flex justify-center pt-36 px-8 pb-8">
+        <Card className="w-full max-w-md p-8 h-fit">
+          {/* Back Link */}
           <Link
             to="/login"
             className="flex items-center gap-2 text-sm text-blue-600 mb-6 hover:underline"
@@ -57,34 +60,36 @@ export default function ResetPassword() {
             Back to login
           </Link>
 
+          {/* Header */}
           <h2 className="text-2xl font-bold mb-2">Reset Password</h2>
 
           <p className="text-sm text-gray-500 mb-6">
             Enter and confirm your new password.
           </p>
 
+          {/* Form */}
           <form className="space-y-5">
-            {/* NEW PASSWORD */}
+            {/* New Password */}
             <div>
               <label className="text-sm font-medium">New Password</label>
               <input
                 type={show ? "text" : "password"}
-                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
+                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            {/* CONFIRM PASSWORD */}
+            {/* Confirm Password */}
             <div>
               <label className="text-sm font-medium">Confirm Password</label>
               <input
                 type={show ? "text" : "password"}
-                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
+                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            {/* SHOW PASSWORD */}
+            {/* Show Password */}
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
@@ -94,19 +99,21 @@ export default function ResetPassword() {
               Show password
             </label>
 
-            {/* BUTTON */}
-            <button
+            {/* Reusable Button */}
+            <Button
               type="submit"
-              className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+              variant="primary"
+              size="lg"
+              className="w-full"
             >
               Reset Password
-            </button>
+            </Button>
           </form>
 
           <p className="text-sm text-center mt-6 text-gray-500">
-            After reset, you’ll be redirected to login
+            After reset, you’ll be redirected to login.
           </p>
-        </div>
+        </Card>
       </div>
     </div>
   );

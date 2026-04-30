@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
+import Button from "../../../components/ui/Button";
 
 export default function HeroSection() {
   const grid = [];
   const cols = 16;
   const rows = 9;
+
+  const progress = Math.min(scrollY / 600, 1);
+  const isLight = progress > 0.5;
 
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
@@ -88,7 +92,6 @@ export default function HeroSection() {
         >
           Build Legal Structure
         </motion.h1>
-
         <motion.p
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,13 +108,15 @@ export default function HeroSection() {
           transition={{ delay: 0.6 }}
           className="mt-10 flex justify-center gap-4"
         >
-          <button className="px-8 py-4 bg-white text-blue-900 rounded-xl font-semibold hover:scale-105 transition">
+          {/* PRIMARY CTA BUTTON (Start Free) */}
+          <Button variant="primary" size="lg">
             Start Free
-          </button>
+          </Button>
 
-          <button className="px-8 py-4 border border-white/30 rounded-xl hover:bg-white/10 transition">
+          {/* OUTLINE BUTTON (Watch Demo) */}
+          <Button variant={isLight ? "outlineLight" : "outlineDark"}>
             Watch Demo
-          </button>
+          </Button>
         </motion.div>
       </div>
     </section>

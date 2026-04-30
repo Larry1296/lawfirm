@@ -1,3 +1,3 @@
 export default function AdminCases() {
-  return <div>All Cases</div>;
+  return <div>Admin Cases</div>;
 }

@@ -3,11 +3,14 @@ import { UserPlus, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+import Card from "../../../components/ui/Card";
+import Button from "../../../components/ui/Button";
+
 export default function Register() {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="min-h-screen mt-9 flex flex-col lg:flex-row">
+    <div className="min-h-screen flex flex-col lg:flex-row">
       {/* ================= LEFT SECTION ================= */}
       <div className="lg:w-1/2 bg-blue-700 relative overflow-hidden flex items-center justify-center p-10">
         {/* Animated blobs */}
@@ -47,8 +50,9 @@ export default function Register() {
       </div>
 
       {/* ================= RIGHT SECTION ================= */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+      <div className="lg:w-1/2 flex items-start justify-center pt-36 md:pt-40 lg:pt-44 p-8 bg-orange-50">
+        <Card className="w-full max-w-md p-8">
+          {/* HEADER */}
           <div className="flex items-center gap-2 mb-6">
             <UserPlus className="text-blue-600" />
             <h2 className="text-2xl font-bold">Register</h2>
@@ -105,13 +109,15 @@ export default function Register() {
               Show password
             </label>
 
-            {/* SUBMIT BUTTON */}
-            <button
+            {/* BUTTON (REUSED) */}
+            <Button
               type="submit"
-              className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+              variant="primary"
+              size="lg"
+              className="w-full"
             >
               Create Account
-            </button>
+            </Button>
           </form>
 
           <p className="text-sm text-center mt-6">
@@ -120,7 +126,7 @@ export default function Register() {
               Login
             </Link>
           </p>
-        </div>
+        </Card>
       </div>
     </div>
   );

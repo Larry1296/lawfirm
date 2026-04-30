@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import Button from "../../components/ui/Button";
 
 const links = [
   { id: "home", label: "Home" },
@@ -96,63 +97,69 @@ export default function PublicNavbar() {
         {/* ================= NAV LINKS (ROW 1) ================= */}
         {!isAuthPage && (
           <div className="flex justify-center gap-3">
-            {links.map((link) => (
-              <button
-                key={link.id}
-                className={`
-                  px-5 py-2 rounded-full font-medium
-                  text-[clamp(0.75rem,1vw,1rem)]
-                  transition-all duration-300
+            {links.map((link) => {
+              const isActive = active === link.id;
 
-                  ${
-                    active === link.id
-                      ? isLight
-                        ? "bg-black text-white"
-                        : "bg-white text-blue-900"
-                      : isLight
-                        ? "text-black/70 hover:bg-black/10"
-                        : "text-white/80 hover:bg-white/10"
-                  }
-                `}
-              >
-                {link.label}
-              </button>
-            ))}
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => {
+                    const el = document.getElementById(link.id);
+                    if (el) {
+                      window.scrollTo({
+                        top: el.offsetTop - 120,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                  className={`
+            px-5 py-2 rounded-full font-medium
+            text-[clamp(0.75rem,1vw,1rem)]
+            transition-all duration-200
+
+            /* BASE 3D STYLE */
+            shadow-[0_6px_0_rgba(0,0,0,0.15)]
+            active:shadow-[0_2px_0_rgba(0,0,0,0.1)]
+            active:translate-y-1
+
+            ${
+              isActive
+                ? isLight
+                  ? `
+                    bg-black text-white
+                    shadow-[0_6px_0_rgba(0,0,0,0.4)]
+                    active:shadow-[0_2px_0_rgba(0,0,0,0.25)]
+                  `
+                  : `
+                    bg-white text-blue-900
+                    shadow-[0_6px_0_rgba(255,255,255,0.25)]
+                    active:shadow-[0_2px_0_rgba(255,255,255,0.15)]
+                  `
+                : isLight
+                  ? "text-black/70 hover:bg-black/10"
+                  : "text-white/80 hover:bg-white/10"
+            }
+          `}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
           </div>
         )}
-
         {/* ================= AUTH BUTTONS (ROW 2) ================= */}
         {!isAuthPage && (
           <div className="flex justify-center gap-4">
-            <Link
-              to="/login"
-              className={`
-                px-6 py-2 rounded-full font-semibold
-                text-[clamp(0.75rem,1vw,1rem)]
-                transition-all duration-300
-
-                ${
-                  isLight
-                    ? "border border-black/20 text-black hover:bg-black/10"
-                    : "border border-white/30 text-white hover:bg-white/10"
-                }
-              `}
-            >
-              Login
+            {/* LOGIN */}
+            <Link to="/login">
+              <Button variant={isLight ? "outlineLight" : "outlineDark"}>
+                Login
+              </Button>
             </Link>
 
-            <Link
-              to="/register"
-              className="
-                px-6 py-2 rounded-full font-semibold
-                text-[clamp(0.75rem,1vw,1rem)]
-                bg-green-600 text-white
-                hover:bg-green-700 hover:scale-105
-                transition-all duration-300
-                shadow-lg
-              "
-            >
-              Get Started
+            {/* GET STARTED */}
+            <Link to="/register">
+              <Button variant="success">Get Started</Button>
             </Link>
           </div>
         )}

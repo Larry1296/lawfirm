@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import { Mail, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import Card from "../../../components/ui/Card";
+import Button from "../../../components/ui/Button";
+
 export default function ForgotPassword() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
@@ -44,8 +47,8 @@ export default function ForgotPassword() {
       </div>
 
       {/* ================= RIGHT SECTION ================= */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+      <div className="lg:w-1/2 flex items-start justify-center pt-36 md:pt-40 lg:pt-44 p-8 bg-orange-50">
+        <Card className="w-full max-w-md p-8">
           {/* Back link */}
           <Link
             to="/login"
@@ -55,12 +58,14 @@ export default function ForgotPassword() {
             Back to login
           </Link>
 
+          {/* Header */}
           <h2 className="text-2xl font-bold mb-2">Forgot Password</h2>
 
           <p className="text-sm text-gray-500 mb-6">
             No worries. We’ll send a reset link to your email.
           </p>
 
+          {/* Form */}
           <form className="space-y-5">
             <div>
               <label className="text-sm font-medium">Email Address</label>
@@ -71,21 +76,24 @@ export default function ForgotPassword() {
               />
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+              variant="primary"
+              size="lg"
+              className="w-full"
             >
               Send Reset Link
-            </button>
+            </Button>
           </form>
 
+          {/* Footer */}
           <p className="text-sm text-center mt-6">
             Remember your password?{" "}
             <Link to="/login" className="text-blue-600 font-semibold">
               Login
             </Link>
           </p>
-        </div>
+        </Card>
       </div>
     </div>
   );

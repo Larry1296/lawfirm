@@ -1,3 +1,3 @@
 export default function AdminReports() {
-  return <div>Reports</div>;
+  return <div>Admin Reports</div>;
 }
