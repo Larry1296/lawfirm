@@ -18,10 +18,10 @@ export default function AdminLayout() {
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
-        <AdminSidebar onNavigate={() => setSidebarOpen(false)} />
+        <AdminSidebar onClose={() => setSidebarOpen(false)} />
       </aside>
 
-      {/* OVERLAY */}
+      {/* OVERLAY (mobile) */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-40 lg:hidden"
@@ -30,14 +30,17 @@ export default function AdminLayout() {
       )}
 
       {/* MAIN COLUMN */}
-      <div className="flex flex-col flex-1 h-screen">
+      <div className="flex flex-col flex-1">
         <AdminTopbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="flex-1 overflow-y-auto">
-          <Outlet />
-        </main>
+        {/* SCROLLABLE CONTENT + FOOTER */}
+        <main className="flex-1 overflow-y-auto flex flex-col">
+          <div className="flex-1 p-4 sm:p-6 lg:p-8">
+            <Outlet />
+          </div>
 
-        <Footer />
+          <Footer />
+        </main>
       </div>
     </div>
   );

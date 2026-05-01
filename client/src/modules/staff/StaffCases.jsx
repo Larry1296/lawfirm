@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function AssistantCases() {
+export default function StaffCases() {
   const cases = [
     { id: 1, title: "Contract Dispute", client: "John Doe" },
     { id: 2, title: "Property Case", client: "Jane Smith" },

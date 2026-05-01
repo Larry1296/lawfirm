@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-export default function AssistantCaseDetails() {
+export default function StaffCaseDetails() {
   const { caseId } = useParams();
 
   return (

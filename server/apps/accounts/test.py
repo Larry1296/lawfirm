@@ -1,6 +1,6 @@
 from apps.accounts.models import User
 
-user = User.objects.get(email="lawyer45@email.com")
+user = User.objects.get(email="lawyer@email.com")
 user.role = "LAWYER"
 user.save()
 
@@ -13,3 +13,7 @@ LawFirm.objects.create(
     name="Musau Advocates",
     owner=lawyer
 )
+
+
+
+print(f"Law firm '{law_firm.name}' created with owner {lawyer.email}")

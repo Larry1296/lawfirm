@@ -72,7 +72,7 @@ export default function ForgotPassword() {
               <input
                 type="email"
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="you@example.com"
+                placeholder="Email Address"
               />
             </div>
 

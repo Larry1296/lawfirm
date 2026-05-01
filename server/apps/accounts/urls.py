@@ -2,32 +2,32 @@ from django.urls import path
 from .views import (
     RegisterView,
     LoginView,
-    CreateAssistantView,
+    CreateStaffView,
     CreateClientView,
-    ToggleAssistantPermissionView,
-    ListAssistantsView,
+    UpdateStaffPermissionsView,
+    ListStaffView,
     ListClientsView,
     MeView
 )
 
-# 👇 ADD THIS IMPORT
 from rest_framework_simplejwt.views import TokenRefreshView
+
 
 urlpatterns = [
     # ================= AUTH =================
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
-
-    # 👇 JWT REFRESH ENDPOINT (THIS FIXES YOUR FRONTEND ERROR)
     path('token/refresh/', TokenRefreshView.as_view()),
 
-    # ================= LAW FIRM OPERATIONS =================
-    path('create-assistant/', CreateAssistantView.as_view()),
-    path('create-client/', CreateClientView.as_view()),
-    path('toggle-assistant/<int:user_id>/', ToggleAssistantPermissionView.as_view()),
+    # ================= STAFF =================
+    path('create-staff/', CreateStaffView.as_view()),
+    path('staff/', ListStaffView.as_view()),
+    path('staff/<int:user_id>/permissions/', UpdateStaffPermissionsView.as_view()),
 
-    # ================= LISTING =================
-    path('assistants/', ListAssistantsView.as_view()),
+    # ================= CLIENT =================
+    path('create-client/', CreateClientView.as_view()),
     path('clients/', ListClientsView.as_view()),
+
+    # ================= USER =================
     path('me/', MeView.as_view()),
 ]

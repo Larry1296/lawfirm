@@ -3,7 +3,24 @@ from .models import LawFirmMember
 
 
 # =========================
-# ONLY LAWYER ACCESS
+# HELPER
+# =========================
+def get_membership(user):
+    if user.role == 'LAWYER':
+        return LawFirmMember.objects.filter(
+            user=user,
+            firm=user.owned_firm,
+            is_active=True
+        ).first()
+
+    return LawFirmMember.objects.filter(
+        user=user,
+        is_active=True
+    ).first()
+
+
+# =========================
+# ONLY SYSTEM OWNER
 # =========================
 class IsLawyer(BasePermission):
     def has_permission(self, request, view):
@@ -15,7 +32,7 @@ class IsLawyer(BasePermission):
 
 
 # =========================
-# LAWYER OR AUTHORIZED ASSISTANT
+# CAN CREATE CLIENT
 # =========================
 class CanCreateClient(BasePermission):
     def has_permission(self, request, view):
@@ -24,16 +41,10 @@ class CanCreateClient(BasePermission):
         if not user or not user.is_authenticated:
             return False
 
-        # LAWYER → always allowed
+        # owner always allowed
         if user.role == 'LAWYER':
             return True
 
-        # ASSISTANT → must have explicit permission
-        if user.role == 'ASSISTANT':
-            try:
-                membership = LawFirmMember.objects.get(user=user)
-                return membership.can_create_clients
-            except LawFirmMember.DoesNotExist:
-                return False
+        membership = get_membership(user)
 
-        return False
+        return membership and membership.can_create_clients

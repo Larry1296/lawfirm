@@ -5,6 +5,7 @@ import {
   Users,
   Calendar,
   FileText,
+  HomeIcon,
   CreditCard,
   BarChart,
   MessageSquare,
@@ -15,6 +16,8 @@ import {
   X,
 } from "lucide-react";
 
+import LogoutButton from "../../components/ui/LogoutButton";
+
 const links = [
   {
     name: "Overview",
@@ -23,9 +26,9 @@ const links = [
     end: true,
   },
   {
-    name: "Home Customization",
+    name: "Home Page",
     path: "/admin/homepagecustomization",
-    icon: <LayoutDashboard size={18} />,
+    icon: <HomeIcon size={18} />,
   },
   { name: "Cases", path: "/admin/cases", icon: <Briefcase size={18} /> },
   { name: "Clients", path: "/admin/clients", icon: <Users size={18} /> },
@@ -59,7 +62,11 @@ export default function AdminSidebar({ onClose }) {
 
         {/* CLOSE BUTTON (mobile only) */}
         <button
-          onClick={onClose}
+          onClick={() => {
+            if (window.innerWidth < 1024) {
+              onClose?.();
+            }
+          }}
           className="lg:hidden p-2 rounded hover:bg-white/10"
         >
           <X size={20} />
@@ -95,10 +102,9 @@ export default function AdminSidebar({ onClose }) {
 
       {/* FOOTER */}
       <div className="p-4 border-t border-white/10">
-        <button className="w-full flex items-center justify-center gap-2 bg-yellow-500 text-green-900 py-2 rounded-xl font-semibold hover:translate-y-[-2px] transition">
-          <LogOut size={16} />
-          Logout
-        </button>
+        <div className="p-4 border-t border-white/10">
+          <LogoutButton onLogout={onClose} />
+        </div>
       </div>
     </aside>
   );

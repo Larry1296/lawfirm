@@ -74,7 +74,7 @@ export default function ResetPassword() {
               <label className="text-sm font-medium">New Password</label>
               <input
                 type={show ? "text" : "password"}
-                placeholder="••••••••"
+                placeholder="New Password"
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -84,7 +84,7 @@ export default function ResetPassword() {
               <label className="text-sm font-medium">Confirm Password</label>
               <input
                 type={show ? "text" : "password"}
-                placeholder="••••••••"
+                placeholder="Repeat Password"
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

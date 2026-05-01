@@ -1,4 +1,4 @@
-export default function AssistantScheduling() {
+export default function StaffScheduling() {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Scheduling</h1>

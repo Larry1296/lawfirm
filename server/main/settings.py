@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'apps.accounts',
+    'apps.homepage',
     'apps.cases',
     'apps.communications',
     'apps.notifications',

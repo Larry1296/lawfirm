@@ -1,26 +1,39 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from django.shortcuts import get_object_or_404
 
-from .models import User, LawFirm, LawFirmMember
+from .models import LawFirmMember
 from .serializers import (
     RegisterSerializer,
     LoginSerializer,
     UserSerializer,
-    CreateUserByLawyerSerializer,
+    CreateStaffSerializer,
+    CreateClientSerializer,
     LawFirmMemberSerializer
 )
-from .permissions import IsLawyer, CanCreateClient
+from .permissions import (
+    IsLawyer,
+    CanCreateClient
+)
 
 
 # =========================
-# CLIENT SELF REGISTRATION
+# RESPONSE HELPER
+# =========================
+def api_response(success=True, message="", data=None, errors=None):
+    return {
+        "success": success,
+        "message": message,
+        "data": data,
+        "errors": errors
+    }
+
+
+# =========================
+# REGISTER (CLIENT)
 # =========================
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -30,23 +43,23 @@ class RegisterView(APIView):
 
         if serializer.is_valid():
             user = serializer.save()
-
             refresh = RefreshToken.for_user(user)
 
-            return Response({
-                "success": True,
-                "message": "Client registered successfully",
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
-                "user": UserSerializer(user).data
-            }, status=status.HTTP_201_CREATED)
+            return Response(api_response(
+                True,
+                "Client registered successfully",
+                {
+                    "access": str(refresh.access_token),
+                    "refresh": str(refresh),
+                    "user": UserSerializer(user).data
+                }
+            ), status=status.HTTP_201_CREATED)
 
-        return Response({
-            "success": False,
-            "errors": serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(api_response(False, errors=serializer.errors), status=400)
+
+
 # =========================
-# LOGIN (JWT)
+# LOGIN
 # =========================
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -58,138 +71,116 @@ class LoginView(APIView):
             user = serializer.validated_data['user']
             refresh = RefreshToken.for_user(user)
 
-            return Response({
-                "success": True,
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
-                "user": UserSerializer(user).data
-            }, status=status.HTTP_200_OK)
+            return Response(api_response(
+                True,
+                "Login successful",
+                {
+                    "access": str(refresh.access_token),
+                    "refresh": str(refresh),
+                    "user": UserSerializer(user).data
+                }
+            ))
 
-        return Response({
-            "success": False,
-            "errors": serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(api_response(False, errors=serializer.errors), status=400)
 
 
 # =========================
-# CREATE ASSISTANT (LAWYER ONLY)
+# CREATE STAFF (LAWYER ONLY)
 # =========================
-class CreateAssistantView(APIView):
+class CreateStaffView(APIView):
     permission_classes = [IsAuthenticated, IsLawyer]
 
     def post(self, request):
-        data = request.data.copy()
-        data['role'] = 'ASSISTANT'
-
-        serializer = CreateUserByLawyerSerializer(data=data)
+        serializer = CreateStaffSerializer(
+            data=request.data,
+            context={"request": request}
+        )
 
         if serializer.is_valid():
             user = serializer.save()
 
-            firm = request.user.owned_firm
+            return Response(api_response(
+                True,
+                "Staff created successfully",
+                UserSerializer(user).data
+            ), status=201)
 
-            LawFirmMember.objects.create(
-                user=user,
-                firm=firm,
-                role='ASSISTANT',
-                can_create_clients=False
-            )
-
-            return Response({
-                "success": True,
-                "message": "Assistant created successfully",
-                "user": UserSerializer(user).data
-            }, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(api_response(False, errors=serializer.errors), status=400)
 
 
 # =========================
-# CREATE CLIENT (LAWYER OR AUTHORIZED ASSISTANT)
+# CREATE CLIENT
 # =========================
 class CreateClientView(APIView):
     permission_classes = [IsAuthenticated, CanCreateClient]
 
     def post(self, request):
-        data = request.data.copy()
-        data['role'] = 'CLIENT'
-
-        serializer = CreateUserByLawyerSerializer(data=data)
+        serializer = CreateClientSerializer(
+            data=request.data,
+            context={"request": request}
+        )
 
         if serializer.is_valid():
             user = serializer.save()
 
-            if request.user.role == 'LAWYER':
-                firm = request.user.owned_firm
-            else:
-                membership = get_object_or_404(
-                    LawFirmMember,
-                    user=request.user
-                )
-                firm = membership.firm
+            return Response(api_response(
+                True,
+                "Client created successfully",
+                UserSerializer(user).data
+            ), status=201)
 
-            LawFirmMember.objects.create(
-                user=user,
-                firm=firm,
-                role='CLIENT'
-            )
-
-            return Response({
-                "success": True,
-                "message": "Client created successfully",
-                "user": UserSerializer(user).data
-            }, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(api_response(False, errors=serializer.errors), status=400)
 
 
 # =========================
-# TOGGLE ASSISTANT PERMISSION
+# UPDATE STAFF PERMISSIONS
 # =========================
-class ToggleAssistantPermissionView(APIView):
+class UpdateStaffPermissionsView(APIView):
     permission_classes = [IsAuthenticated, IsLawyer]
 
-    def post(self, request, user_id):
-        assistant = get_object_or_404(
-            User,
-            id=user_id,
-            role='ASSISTANT'
-        )
-
+    def patch(self, request, user_id):
         membership = get_object_or_404(
             LawFirmMember,
-            user=assistant,
+            user__id=user_id,
             firm=request.user.owned_firm
         )
 
-        membership.can_create_clients = not membership.can_create_clients
+        for field in [
+            'can_create_clients',
+            'can_manage_cases',
+            'can_view_all_cases',
+            'can_schedule',
+            'can_manage_documents',
+            'is_active'
+        ]:
+            if field in request.data:
+                setattr(membership, field, request.data[field])
+
         membership.save()
 
-        return Response({
-            "success": True,
-            "can_create_clients": membership.can_create_clients
-        })
+        return Response(api_response(
+            True,
+            "Permissions updated",
+            LawFirmMemberSerializer(membership).data
+        ))
 
 
 # =========================
-# LIST ASSISTANTS
+# LIST STAFF
 # =========================
-class ListAssistantsView(APIView):
+class ListStaffView(APIView):
     permission_classes = [IsAuthenticated, IsLawyer]
 
     def get(self, request):
-        firm = request.user.owned_firm
-
-        assistants = LawFirmMember.objects.filter(
-            firm=firm,
-            role='ASSISTANT'
+        members = LawFirmMember.objects.filter(
+            firm=request.user.owned_firm,
+            role__in=['LAWYER', 'SECRETARY']
         ).select_related('user')
 
-        return Response({
-            "success": True,
-            "count": assistants.count(),
-            "data": LawFirmMemberSerializer(assistants, many=True).data
-        })
+        return Response(api_response(
+            True,
+            data=LawFirmMemberSerializer(members, many=True).data
+        ))
 
 
 # =========================
@@ -199,32 +190,17 @@ class ListClientsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
-        if request.user.role == 'LAWYER':
-            firm = request.user.owned_firm
-
-        elif request.user.role == 'ASSISTANT':
-            membership = get_object_or_404(
-                LawFirmMember,
-                user=request.user
-            )
-            firm = membership.firm
-
-        else:
-            return Response({
-                "error": "Not allowed"
-            }, status=status.HTTP_403_FORBIDDEN)
+        membership = request.user.firm
 
         clients = LawFirmMember.objects.filter(
-            firm=firm,
+            firm=membership,
             role='CLIENT'
         ).select_related('user')
 
-        return Response({
-            "success": True,
-            "count": clients.count(),
-            "data": LawFirmMemberSerializer(clients, many=True).data
-        })
+        return Response(api_response(
+            True,
+            data=LawFirmMemberSerializer(clients, many=True).data
+        ))
 
 
 # =========================
@@ -234,7 +210,7 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({
-            "success": True,
-            "user": UserSerializer(request.user).data
-        })
+        return Response(api_response(
+            True,
+            data=UserSerializer(request.user).data
+        ))

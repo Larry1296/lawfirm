@@ -1,4 +1,4 @@
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu, User } from "lucide-react";
 
 export default function AdminTopbar({ onMenuClick }) {
   return (
@@ -22,7 +22,9 @@ export default function AdminTopbar({ onMenuClick }) {
 
         {/* PROFILE */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gray-300 rounded-full" />
+          <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center">
+            <User size={18} />
+          </div>
           <span className="text-sm hidden sm:block">Admin</span>
         </div>
       </div>

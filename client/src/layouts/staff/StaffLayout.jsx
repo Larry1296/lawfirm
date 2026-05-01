@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import AssistantSidebar from "./AssistantSidebar";
-import AssistantTopbar from "./AssistantTopbar";
+import AssistantSidebar from "./StaffSidebar";
+import AssistantTopbar from "./StaffTopbar";
 import Footer from "../../components/Footer";
 
 export default function AssistantLayout() {

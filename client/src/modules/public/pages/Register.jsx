@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { UserPlus, ShieldCheck } from "lucide-react";
+import { UserPlus, ShieldCheck, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -52,6 +52,14 @@ export default function Register() {
       {/* ================= RIGHT SECTION ================= */}
       <div className="lg:w-1/2 flex items-start justify-center pt-36 md:pt-40 lg:pt-44 p-8 bg-orange-50">
         <Card className="w-full max-w-md p-8">
+          {/* Back link */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-sm text-blue-600 mb-6 hover:underline"
+          >
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
           {/* HEADER */}
           <div className="flex items-center gap-2 mb-6">
             <UserPlus className="text-blue-600" />
@@ -65,7 +73,7 @@ export default function Register() {
               <input
                 type="text"
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="John Doe"
+                placeholder="Name"
               />
             </div>
 
@@ -75,7 +83,7 @@ export default function Register() {
               <input
                 type="email"
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="you@example.com"
+                placeholder="Email"
               />
             </div>
 
@@ -85,7 +93,7 @@ export default function Register() {
               <input
                 type={show ? "text" : "password"}
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
+                placeholder="Password"
               />
             </div>
 
@@ -95,7 +103,7 @@ export default function Register() {
               <input
                 type={show ? "text" : "password"}
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
+                placeholder="Repeat Password"
               />
             </div>
 

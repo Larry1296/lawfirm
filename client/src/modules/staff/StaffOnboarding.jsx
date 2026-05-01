@@ -1,4 +1,4 @@
-export default function AssistantOnboarding() {
+export default function StaffOnboarding() {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Client Onboarding</h1>

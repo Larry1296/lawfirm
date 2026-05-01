@@ -1,4 +1,4 @@
-export default function AssistantDashboard() {
+export default function StaffDashboard() {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Assistant Dashboard</h1>
