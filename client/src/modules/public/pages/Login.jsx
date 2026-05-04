@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShieldCheck, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
-import { login } from "../../../services/authApi"; // Make sure to import the login API call
+import { login } from "../../../services/usersApi"; // Make sure to import the login API call
 import { useAuthStore } from "../../../stores/authStore"; // Import the Zustand store
 import Card from "../../../components/ui/Card";
 import Button from "../../../components/ui/Button";
@@ -27,30 +27,34 @@ export default function Login() {
     try {
       const res = await login({ email, password });
 
-      const { user, access, refresh } = res.data;
+      const data = res.data?.data;
 
-      if (!user || !access) {
-        setError("Invalid response structure. Please try again.");
+      if (!data) {
+        setError(res.data?.message || "Login failed");
+        setLoading(false);
         return;
       }
 
-      // Save to Zustand
-      setAuth({
-        user,
-        access,
-        refresh,
-      });
+      const { user, access, refresh } = data;
 
-      // Role routing
-      if (user.role === "LAWYER") {
-        navigate("/admin/dashboard");
-      } else if (user.role === "STAFF") {
-        navigate("/staff/dashboard");
-      } else {
-        navigate("/client/dashboard");
+      if (!user || !access) {
+        setError("Invalid response structure. Please try again.");
+        setLoading(false);
+        return;
       }
+
+      setAuth({ user, access, refresh });
+
+      setTimeout(() => {
+        if (user.role === "ADMIN") navigate("/admin/dashboard");
+        else if (user.role === "STAFF") navigate("/staff/dashboard");
+        else navigate("/client/dashboard");
+      }, 0);
     } catch (err) {
-      console.log(err);
+      console.log("FULL ERROR:", err);
+      console.log("STATUS:", err.response?.status);
+      console.log("RESPONSE DATA:", err.response?.data);
+
       setError("Login failed. Please try again.");
     } finally {
       setLoading(false);

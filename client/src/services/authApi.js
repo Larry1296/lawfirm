@@ -1,22 +1,10 @@
-import API from "./api";
+import axios from "axios";
 
-// AUTH
-export const login = async (data) => {
-  const res = await API.post("/auth/login/", data);
-  return res.data;
-};
+const authApi = axios.create({
+  baseURL: "http://127.0.0.1:8000/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export const register = async (data) => {
-  const res = await API.post("/auth/register/", data);
-  return res.data;
-};
-
-export const refreshToken = async (data) => {
-  const res = await API.post("/auth/token/refresh/", data);
-  return res.data;
-};
-
-export const getMe = async () => {
-  const res = await API.get("/auth/me/");
-  return res.data;
-};
+export default authApi;

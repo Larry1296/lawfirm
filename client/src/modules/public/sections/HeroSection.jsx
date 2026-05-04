@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import Button from "../../../components/ui/Button";
 
 export default function HeroSection() {
+  const { isLight } = useOutletContext();
   const grid = [];
   const cols = 16;
   const rows = 9;
-
-  const progress = Math.min(scrollY / 600, 1);
-  const isLight = progress > 0.5;
 
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
@@ -88,36 +88,74 @@ export default function HeroSection() {
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-7xl font-bold"
+          className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight"
         >
           Build Legal Structure
         </motion.h1>
+
         <motion.p
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mt-6 text-lg md:text-xl text-blue-100"
+          className="mt-6 text-base sm:text-lg md:text-xl text-blue-100"
         >
           A structured, living legal system — cases, clients, and justice in
           motion.
         </motion.p>
 
+        {/* MAIN CTA */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="mt-10 flex justify-center gap-4"
+          className="mt-10 flex flex-wrap justify-center gap-4"
         >
-          {/* PRIMARY CTA BUTTON (Start Free) */}
           <Button variant="primary" size="lg">
             Start Free
           </Button>
 
-          {/* OUTLINE BUTTON (Watch Demo) */}
           <Button variant={isLight ? "outlineLight" : "outlineDark"}>
             Watch Demo
           </Button>
         </motion.div>
+
+        {/* FLOATING AUTH BUTTONS */}
+        <div className="relative mt-14">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Link to="/login">
+                <Button variant={isLight ? "outlineLight" : "outlineDark"}>
+                  Login
+                </Button>
+              </Link>
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, -12, 0] }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Link to="/register">
+                <Button variant="success">Create Account</Button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

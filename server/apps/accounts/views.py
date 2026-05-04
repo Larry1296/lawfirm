@@ -5,18 +5,21 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 
-from .models import LawFirmMember
+from .models import LawFirmMember, User
 from .serializers import (
     RegisterSerializer,
     LoginSerializer,
     UserSerializer,
     CreateStaffSerializer,
     CreateClientSerializer,
-    LawFirmMemberSerializer
+    LawFirmMemberSerializer,
+    ConvertClientSerializer, 
+    UserSerializer
 )
 from .permissions import (
-    IsLawyer,
-    CanCreateClient
+    IsAdmin,
+    CanCreateClient,
+    CanDeleteUser
 )
 
 
@@ -56,6 +59,52 @@ class RegisterView(APIView):
             ), status=status.HTTP_201_CREATED)
 
         return Response(api_response(False, errors=serializer.errors), status=400)
+    
+class ConvertClientToFirmView(APIView):
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def post(self, request, user_id):
+
+        user = get_object_or_404(User, id=user_id)
+
+        # 1. Must be a client
+        if user.role != "CLIENT":
+            return Response(api_response(
+                False,
+                message="User is not a client"
+            ), status=400)
+
+        firm = request.user.owned_firm
+
+        # 2. Already member check
+        existing = LawFirmMember.objects.filter(
+            user=user,
+            firm=firm,
+            is_active=True
+        ).first()
+
+        if existing:
+            return Response(api_response(
+                False,
+                message="Client already belongs to this firm"
+            ), status=400)
+
+        # 3. Create membership
+        membership = LawFirmMember.objects.create(
+            user=user,
+            firm=firm,
+            role="CLIENT",
+            created_by=request.user
+        )
+
+        return Response(api_response(
+            True,
+            message="Client successfully added to firm",
+            data={
+                "user": UserSerializer(user).data,
+                "membership_id": membership.id
+            }
+        ))
 
 
 # =========================
@@ -85,10 +134,10 @@ class LoginView(APIView):
 
 
 # =========================
-# CREATE STAFF (LAWYER ONLY)
+# CREATE STAFF (ADMIN ONLY)
 # =========================
 class CreateStaffView(APIView):
-    permission_classes = [IsAuthenticated, IsLawyer]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def post(self, request):
         serializer = CreateStaffSerializer(
@@ -136,23 +185,30 @@ class CreateClientView(APIView):
 # UPDATE STAFF PERMISSIONS
 # =========================
 class UpdateStaffPermissionsView(APIView):
-    permission_classes = [IsAuthenticated, IsLawyer]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def patch(self, request, user_id):
+
+        firm = getattr(request.user, "owned_firm", None)
+        if not firm:
+            return Response(api_response(False, "No firm found"), status=403)
+
         membership = get_object_or_404(
             LawFirmMember,
             user__id=user_id,
-            firm=request.user.owned_firm
+            firm=firm
         )
 
-        for field in [
+        allowed_fields = [
             'can_create_clients',
             'can_manage_cases',
             'can_view_all_cases',
             'can_schedule',
             'can_manage_documents',
             'is_active'
-        ]:
+        ]
+
+        for field in allowed_fields:
             if field in request.data:
                 setattr(membership, field, request.data[field])
 
@@ -169,11 +225,16 @@ class UpdateStaffPermissionsView(APIView):
 # LIST STAFF
 # =========================
 class ListStaffView(APIView):
-    permission_classes = [IsAuthenticated, IsLawyer]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request):
+
+        firm = getattr(request.user, "owned_firm", None)
+        if not firm:
+            return Response(api_response(False, "No firm found"), status=403)
+
         members = LawFirmMember.objects.filter(
-            firm=request.user.owned_firm,
+            firm=firm,
             role__in=['LAWYER', 'SECRETARY']
         ).select_related('user')
 
@@ -184,22 +245,49 @@ class ListStaffView(APIView):
 
 
 # =========================
-# LIST CLIENTS
+# LIST CLIENTS (SECURE FIX)
 # =========================
 class ListClientsView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request):
-        membership = request.user.firm
+
+        firm = request.user.firm
+        if not firm:
+            return Response(api_response(False, "No firm found"), status=403)
 
         clients = LawFirmMember.objects.filter(
-            firm=membership,
+            firm=firm,
             role='CLIENT'
         ).select_related('user')
 
         return Response(api_response(
             True,
             data=LawFirmMemberSerializer(clients, many=True).data
+        ))
+
+
+# =========================
+# DELETE USER
+# =========================
+class DeleteUserView(APIView):
+    permission_classes = [IsAuthenticated, CanDeleteUser]
+
+    def delete(self, request, user_id):
+
+        user = get_object_or_404(User, id=user_id)
+
+        if user == request.user:
+            return Response(api_response(
+                False,
+                "You cannot delete yourself"
+            ), status=400)
+
+        user.delete()
+
+        return Response(api_response(
+            True,
+            "User deleted successfully"
         ))
 
 

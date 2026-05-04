@@ -1,18 +1,24 @@
-from apps.accounts.models import User
+from apps.accounts.models import User, LawFirm, Profile
 
-user = User.objects.get(email="lawyer@email.com")
-user.role = "LAWYER"
-user.save()
+admin = User.objects.get(email="admin@email.com")
 
+# set role
+admin.role = "ADMIN"
+admin.is_staff = True
+admin.is_superuser = True
+admin.save()
 
-from apps.accounts.models import LawFirm, User
-
-lawyer = User.objects.get(email="lawyer45@email.com")
-
-LawFirm.objects.create(
+# create law firm
+law_firm = LawFirm.objects.create(
     name="Musau Advocates",
-    owner=lawyer
+    owner=admin
 )
+
+# set admin phone
+profile = admin.profile
+profile.phone_number = "0712345678"
+profile.full_name = "System Admin"
+profile.save()
 
 
 

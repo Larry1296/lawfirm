@@ -6,45 +6,185 @@ from .models import LawFirmMember
 # HELPER
 # =========================
 def get_membership(user):
-    if user.role == 'LAWYER':
-        return LawFirmMember.objects.filter(
-            user=user,
-            firm=user.owned_firm,
-            is_active=True
-        ).first()
+    """
+    Returns the active firm membership for a user
+    """
+    if not user or not user.is_authenticated:
+        return None
 
     return LawFirmMember.objects.filter(
         user=user,
         is_active=True
-    ).first()
+    ).select_related('firm').first()
 
 
 # =========================
-# ONLY SYSTEM OWNER
+# ROLE-BASED PERMISSIONS
 # =========================
-class IsLawyer(BasePermission):
+
+class IsAdmin(BasePermission):
+    """
+    Only system owner (ADMIN)
+    """
     def has_permission(self, request, view):
         return (
             request.user
             and request.user.is_authenticated
-            and request.user.role == 'LAWYER'
+            and request.user.role == 'ADMIN'
+        )
+
+
+class IsStaff(BasePermission):
+    """
+    Staff users only
+    """
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == 'STAFF'
+        )
+
+
+class IsClient(BasePermission):
+    """
+    Client users only
+    """
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == 'CLIENT'
         )
 
 
 # =========================
-# CAN CREATE CLIENT
+# PERMISSION-BASED ACCESS
 # =========================
+
 class CanCreateClient(BasePermission):
+    """
+    ADMIN always allowed
+    STAFF allowed only if permission is enabled
+    """
     def has_permission(self, request, view):
         user = request.user
 
         if not user or not user.is_authenticated:
             return False
 
-        # owner always allowed
-        if user.role == 'LAWYER':
+        # ADMIN can always create clients
+        if user.role == 'ADMIN':
             return True
 
         membership = get_membership(user)
 
-        return membership and membership.can_create_clients
+        return (
+            membership
+            and membership.is_active
+            and membership.can_create_clients
+        )
+
+
+class CanManageCases(BasePermission):
+    """
+    Legal case management (LAWYERS only by default)
+    """
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not user.is_authenticated:
+            return False
+
+        if user.role == 'ADMIN':
+            return True
+
+        membership = get_membership(user)
+
+        return (
+            membership
+            and membership.is_active
+            and membership.can_manage_cases
+        )
+
+
+class CanViewAllCases(BasePermission):
+    """
+    View all firm cases
+    """
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not user.is_authenticated:
+            return False
+
+        if user.role == 'ADMIN':
+            return True
+
+        membership = get_membership(user)
+
+        return (
+            membership
+            and membership.is_active
+            and membership.can_view_all_cases
+        )
+
+
+class CanSchedule(BasePermission):
+    """
+    Calendar / scheduling access
+    """
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not user.is_authenticated:
+            return False
+
+        if user.role == 'ADMIN':
+            return True
+
+        membership = get_membership(user)
+
+        return (
+            membership
+            and membership.is_active
+            and membership.can_schedule
+        )
+
+
+class CanManageDocuments(BasePermission):
+    """
+    Document management
+    """
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not user.is_authenticated:
+            return False
+
+        if user.role == 'ADMIN':
+            return True
+
+        membership = get_membership(user)
+
+        return (
+            membership
+            and membership.is_active
+            and membership.can_manage_documents
+        )
+
+
+# =========================
+# DESTRUCTIVE ACTIONS
+# =========================
+
+class CanDeleteUser(BasePermission):
+    """
+    Only ADMIN can delete users (staff + clients)
+    """
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == 'ADMIN'
+        )

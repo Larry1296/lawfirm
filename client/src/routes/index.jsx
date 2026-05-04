@@ -87,9 +87,9 @@ export default function AppRoutes() {
         <Route path="settings" element={<ClientSettings />} />
       </Route>
 
-      {/* ================= ASSISTANT ================= */}
+      {/* ================= STAFF ================= */}
       <Route
-        path="/assistant"
+        path="/staff"
         element={
           <ProtectedRoute allowedRoles={["STAFF"]}>
             <StaffLayout />
@@ -108,7 +108,7 @@ export default function AppRoutes() {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute allowedRoles={["LAWYER"]}>
+          <ProtectedRoute allowedRoles={["ADMIN"]}>
             <AdminLayout />
           </ProtectedRoute>
         }

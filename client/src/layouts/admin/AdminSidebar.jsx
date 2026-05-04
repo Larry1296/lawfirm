@@ -12,10 +12,10 @@ import {
   ShieldCheck,
   Settings,
   UserCog,
-  LogOut,
   X,
 } from "lucide-react";
 
+import Button from "../../components/ui/Button";
 import LogoutButton from "../../components/ui/LogoutButton";
 
 const links = [
@@ -60,13 +60,8 @@ export default function AdminSidebar({ onClose }) {
           <p className="text-xs text-white/60">Admin Panel</p>
         </div>
 
-        {/* CLOSE BUTTON (mobile only) */}
         <button
-          onClick={() => {
-            if (window.innerWidth < 1024) {
-              onClose?.();
-            }
-          }}
+          onClick={() => window.innerWidth < 1024 && onClose?.()}
           className="lg:hidden p-2 rounded hover:bg-white/10"
         >
           <X size={20} />
@@ -74,37 +69,28 @@ export default function AdminSidebar({ onClose }) {
       </div>
 
       {/* NAV */}
-      <nav className="flex-1 p-3 sm:p-4 space-y-1 sm:space-y-2 overflow-y-auto">
+      <nav className="flex-1 p-3 space-y-2 overflow-y-auto">
         {links.map((link) => (
           <NavLink
             key={link.name}
             to={link.path}
             end={link.end || false}
-            onClick={onClose} // ✅ CLOSE SIDEBAR ON CLICK
-            className={({ isActive }) =>
-              `
-        flex items-center gap-3 px-3 sm:px-4 py-2 rounded-xl
-        transition-all duration-200 text-sm sm:text-base
-
-        ${
-          isActive
-            ? "bg-white text-blue-900 shadow-[0_6px_0_rgba(0,0,0,0.2)] translate-y-[-2px]"
-            : "text-white/80 hover:bg-white/10"
-        }
-        `
-            }
+            onClick={onClose}
+            className="block"
           >
-            {link.icon}
-            <span className="font-medium">{link.name}</span>
+            {({ isActive }) => (
+              <Button variant="sidebar" isActive={isActive}>
+                {link.icon}
+                <span className="font-medium">{link.name}</span>
+              </Button>
+            )}
           </NavLink>
         ))}
       </nav>
 
       {/* FOOTER */}
       <div className="p-4 border-t border-white/10">
-        <div className="p-4 border-t border-white/10">
-          <LogoutButton onLogout={onClose} />
-        </div>
+        <LogoutButton onLogout={onClose} />
       </div>
     </aside>
   );

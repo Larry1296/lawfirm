@@ -25,12 +25,9 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        """
-        SYSTEM OWNER (MAIN LAWYER)
-        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('role', 'LAWYER')
+        extra_fields.setdefault('role', 'ADMIN')
 
         return self.create_user(email, password, **extra_fields)
 
@@ -41,8 +38,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
 
     ROLE_CHOICES = (
-        ('LAWYER', 'Lawyer'),   # system owner
-        ('STAFF', 'Staff'),     # employees (co-lawyers + secretaries)
+        ('ADMIN', 'Admin'),     # system owner
+        ('STAFF', 'Staff'),     # belongs to firm (lawyers/secretaries)
         ('CLIENT', 'Client'),
     )
 
@@ -52,7 +49,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    # forces first-time password change
     force_password_change = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -65,25 +61,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    # 🔥 helper: get membership in a firm
-    def get_membership(self, firm):
-        return self.lawfirmmember_set.filter(firm=firm, is_active=True).first()
+    # =========================
+    # MEMBERSHIP HELPERS
+    # =========================
+    def get_membership(self):
+        return self.lawfirmmember_set.filter(is_active=True).first()
 
-    # 🔥 helper: current firm (single-firm system)
     @property
     def firm(self):
-        if self.role == 'LAWYER':
+        """
+        ADMIN -> owns firm
+        STAFF -> belongs to firm via membership
+        CLIENT -> may or may not belong to firm
+        """
+        if self.role == 'ADMIN':
             return getattr(self, 'owned_firm', None)
 
-        return (
-            self.lawfirmmember_set
-            .filter(is_active=True)
-            .select_related('firm')
-            .first()
-            .firm
-            if self.lawfirmmember_set.filter(is_active=True).exists()
-            else None
-        )
+        membership = self.get_membership()
+        return membership.firm if membership else None
 
 
 # =========================
@@ -98,7 +93,7 @@ class Profile(models.Model):
     )
 
     full_name = models.CharField(max_length=255)
-    national_id = models.CharField(max_length=50, unique=True)
+    national_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
     phone_number = models.CharField(max_length=20)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -123,8 +118,8 @@ class LawFirm(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
-        if self.owner.role != 'LAWYER':
-            raise ValidationError("Only a LAWYER can own a law firm")
+        if self.owner.role != 'ADMIN':
+            raise ValidationError("Only ADMIN can own a law firm")
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
@@ -147,9 +142,6 @@ class LawFirm(models.Model):
                 }
             )
 
-    def __str__(self):
-        return self.name
-
 
 # =========================
 # LAW FIRM MEMBERSHIP
@@ -167,17 +159,15 @@ class LawFirmMember(models.Model):
 
     role = models.CharField(max_length=20, choices=ROLE_IN_FIRM)
 
-    # 🔥 PERMISSIONS
+    # PERMISSIONS
     can_create_clients = models.BooleanField(default=False)
     can_manage_cases = models.BooleanField(default=False)
     can_view_all_cases = models.BooleanField(default=False)
     can_schedule = models.BooleanField(default=False)
     can_manage_documents = models.BooleanField(default=False)
 
-    # 🔥 CONTROL
     is_active = models.BooleanField(default=True)
 
-    # 🔥 AUDIT
     created_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -195,26 +185,30 @@ class LawFirmMember(models.Model):
                 name='unique_user_firm_membership'
             )
         ]
-        indexes = [
-            models.Index(fields=['firm']),
-            models.Index(fields=['user']),
-        ]
 
+    # =========================
+    # VALIDATION RULES
+    # =========================
     def clean(self):
-        # 🔒 ROLE CONSISTENCY
 
+        # CLIENT must match
         if self.role == 'CLIENT' and self.user.role != 'CLIENT':
-            raise ValidationError("Only CLIENT users can have CLIENT role in firm")
+            raise ValidationError("Only CLIENT users can have CLIENT role")
 
-        if self.role in ['LAWYER', 'SECRETARY'] and self.user.role not in ['LAWYER', 'STAFF']:
-            raise ValidationError("Only LAWYER or STAFF users can be assigned staff roles")
+        # STAFF roles only for STAFF or ADMIN
+        if self.role in ['LAWYER', 'SECRETARY'] and self.user.role not in ['STAFF', 'ADMIN']:
+            raise ValidationError("Only STAFF/ADMIN can be assigned firm roles")
 
-        if self.user.role == 'LAWYER' and self.role != 'LAWYER':
-            raise ValidationError("Owner must have LAWYER role in firm membership")
+        # ADMIN must be LAWYER inside firm
+        if self.user.role == 'ADMIN' and self.role != 'LAWYER':
+            raise ValidationError("ADMIN must be LAWYER in firm")
+
+        # Secretary restrictions
+        if self.role == 'SECRETARY' and self.can_manage_cases:
+            raise ValidationError("Secretary cannot manage cases")
 
     def save(self, *args, **kwargs):
 
-        # 🔥 DEFAULT PERMISSIONS BASED ON ROLE
         if not self.pk:
             if self.role == 'LAWYER':
                 self.can_create_clients = True
@@ -229,6 +223,3 @@ class LawFirmMember(models.Model):
 
         self.clean()
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.user.email} ({self.role}) - {self.firm.name}"

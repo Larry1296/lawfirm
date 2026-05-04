@@ -1,12 +1,14 @@
 from django.urls import path
 from .views import (
     RegisterView,
+    ConvertClientToFirmView,
     LoginView,
     CreateStaffView,
     CreateClientView,
     UpdateStaffPermissionsView,
     ListStaffView,
     ListClientsView,
+    DeleteUserView,
     MeView
 )
 
@@ -20,13 +22,16 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view()),
 
     # ================= STAFF =================
-    path('create-staff/', CreateStaffView.as_view()),
-    path('staff/', ListStaffView.as_view()),
-    path('staff/<int:user_id>/permissions/', UpdateStaffPermissionsView.as_view()),
+    path('staff/', ListStaffView.as_view()),                         # GET
+    path('staff/create/', CreateStaffView.as_view()),                # POST
+    path('staff/<int:user_id>/permissions/', UpdateStaffPermissionsView.as_view()),  # PATCH
+    path('staff/<int:user_id>/delete/', DeleteUserView.as_view()),   # DELETE
 
     # ================= CLIENT =================
-    path('create-client/', CreateClientView.as_view()),
-    path('clients/', ListClientsView.as_view()),
+    path('clients/', ListClientsView.as_view()),                     # GET
+    path('clients/create/', CreateClientView.as_view()),  
+    path("clients/<int:user_id>/convert/", ConvertClientToFirmView.as_view()),   # POST                                                                            
+    path('clients/<int:user_id>/delete/', DeleteUserView.as_view()), # DELETE
 
     # ================= USER =================
     path('me/', MeView.as_view()),

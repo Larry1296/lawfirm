@@ -1,13 +1,45 @@
 import { motion } from "framer-motion";
 import { UserPlus, ShieldCheck, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { register } from "../../../services/usersApi"; // import register API call
 import Card from "../../../components/ui/Card";
 import Button from "../../../components/ui/Button";
 
 export default function Register() {
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const formData = {
+      full_name: e.target.full_name.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+
+    console.log("Form Data Sent:", formData);
+    try {
+      const res = await register(formData); // Call your register API
+
+      // On success
+      console.log(res.data); // Handle your response (store tokens, etc.)
+      navigate("/login"); // Or auto-login and redirect to dashboard
+    } catch (err) {
+      setError("Registration failed. Please try again.", err);
+      console.error(
+        "Registration failed:",
+        error.response?.data || error.message,
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
@@ -66,11 +98,12 @@ export default function Register() {
             <h2 className="text-2xl font-bold">Register</h2>
           </div>
 
-          <form className="space-y-5">
+          <form onSubmit={handleRegister} className="space-y-5">
             {/* FULL NAME */}
             <div>
               <label className="text-sm font-medium">Full Name</label>
               <input
+                name="full_name"
                 type="text"
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Name"
@@ -81,6 +114,7 @@ export default function Register() {
             <div>
               <label className="text-sm font-medium">Email</label>
               <input
+                name="email"
                 type="email"
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Email"
@@ -91,6 +125,7 @@ export default function Register() {
             <div>
               <label className="text-sm font-medium">Password</label>
               <input
+                name="password"
                 type={show ? "text" : "password"}
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Password"
@@ -101,6 +136,7 @@ export default function Register() {
             <div>
               <label className="text-sm font-medium">Confirm Password</label>
               <input
+                name="confirm_password"
                 type={show ? "text" : "password"}
                 className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Repeat Password"
@@ -117,16 +153,21 @@ export default function Register() {
               Show password
             </label>
 
-            {/* BUTTON (REUSED) */}
+            {/* BUTTON */}
             <Button
               type="submit"
               variant="primary"
               size="lg"
               className="w-full"
+              disabled={loading}
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
+
+          {error && (
+            <div className="text-red-500 mt-2 text-center">{error}</div>
+          )}
 
           <p className="text-sm text-center mt-6">
             Already have an account?{" "}
