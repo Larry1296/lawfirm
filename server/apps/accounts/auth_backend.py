@@ -1,29 +1,25 @@
-from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.hashers import check_password
-from .models import User
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
-class EmailBackend(BaseBackend):
+class EmailBackend(ModelBackend):
 
-    def authenticate(self, request, email=None, password=None, username=None, **kwargs):
-        """
-        Supports both email and username for compatibility
-        """
+    def authenticate(self, request, username=None, email=None, password=None, **kwargs):
 
-        if email is None:
-            email = username  # fallback for Django default behavior
+        # Django passes username → treat it as email
+        identifier = username or email
 
-        if email is None or password is None:
+        if identifier is None or password is None:
             return None
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(email=identifier)
+
         except User.DoesNotExist:
-            # Run fake hash to prevent timing attacks
-            User().set_password(password)
             return None
 
-        # Check password + active status
         if user.check_password(password) and user.is_active:
             return user
 

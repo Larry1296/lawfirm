@@ -22,16 +22,17 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view()),
 
     # ================= STAFF =================
-    path('staff/', ListStaffView.as_view()),                         # GET
-    path('staff/create/', CreateStaffView.as_view()),                # POST
-    path('staff/<int:user_id>/permissions/', UpdateStaffPermissionsView.as_view()),  # PATCH
-    path('staff/<int:user_id>/delete/', DeleteUserView.as_view()),   # DELETE
+    path('staff/', ListStaffView.as_view()),  # GET
+    path('staff/create/', CreateStaffView.as_view()),  # POST
+    path('staff/<uuid:user_id>/permissions/', UpdateStaffPermissionsView.as_view()),  # PATCH
+    path('staff/<uuid:user_id>/delete/', DeleteUserView.as_view()),  # DELETE
 
     # ================= CLIENT =================
-    path('clients/', ListClientsView.as_view()),                     # GET
-    path('clients/create/', CreateClientView.as_view()),  
-    path("clients/<int:user_id>/convert/", ConvertClientToFirmView.as_view()),   # POST                                                                            
-    path('clients/<int:user_id>/delete/', DeleteUserView.as_view()), # DELETE
+    path('clients/', ListClientsView.as_view()),  # GET
+    path('clients/create/', CreateClientView.as_view()),
+
+    path('clients/<uuid:user_id>/convert/', ConvertClientToFirmView.as_view()),  # POST
+    path('clients/<uuid:user_id>/delete/', DeleteUserView.as_view()),  # DELETE
 
     # ================= USER =================
     path('me/', MeView.as_view()),

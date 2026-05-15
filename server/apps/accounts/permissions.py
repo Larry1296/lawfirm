@@ -2,189 +2,145 @@ from rest_framework.permissions import BasePermission
 from .models import LawFirmMember
 
 
-# =========================
-# HELPER
-# =========================
+# =========================================================
+# HELPERS
+# =========================================================
 def get_membership(user):
     """
-    Returns the active firm membership for a user
+    Returns active firm membership for a user.
+    Central source of truth (avoid duplication elsewhere).
     """
     if not user or not user.is_authenticated:
         return None
 
-    return LawFirmMember.objects.filter(
-        user=user,
-        is_active=True
-    ).select_related('firm').first()
+    return user.get_membership()
 
 
-# =========================
-# ROLE-BASED PERMISSIONS
-# =========================
-
+# =========================================================
+# BASE ROLE PERMISSIONS
+# =========================================================
 class IsAdmin(BasePermission):
-    """
-    Only system owner (ADMIN)
-    """
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user
-            and request.user.is_authenticated
-            and request.user.role == 'ADMIN'
+            user
+            and user.is_authenticated
+            and user.role == 'ADMIN'
+            and user.is_active
         )
 
 
 class IsStaff(BasePermission):
     """
-    Staff users only
+    System-level staff (not firm role)
     """
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user
-            and request.user.is_authenticated
-            and request.user.role == 'STAFF'
+            user
+            and user.is_authenticated
+            and user.role in ['ADMIN', 'STAFF']
         )
 
 
 class IsClient(BasePermission):
-    """
-    Client users only
-    """
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user
-            and request.user.is_authenticated
-            and request.user.role == 'CLIENT'
+            user
+            and user.is_authenticated
+            and user.role == 'CLIENT'
         )
 
 
-# =========================
-# PERMISSION-BASED ACCESS
-# =========================
+class IsFirmMember(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
 
-class CanCreateClient(BasePermission):
+        return bool(get_membership(user))
+
+
+# =========================================================
+# RBAC BASE PERMISSION (FIRM LEVEL)
+# =========================================================
+class HasFirmPermission(BasePermission):
     """
-    ADMIN always allowed
-    STAFF allowed only if permission is enabled
+    Base class for all firm-level permissions
     """
+    required_permission = None
+
     def has_permission(self, request, view):
         user = request.user
 
         if not user or not user.is_authenticated:
             return False
 
-        # ADMIN can always create clients
-        if user.role == 'ADMIN':
+        # ADMIN bypass (safe version)
+        if user.role == 'ADMIN' and user.is_active:
             return True
 
-        membership = get_membership(user)
-
-        return (
-            membership
-            and membership.is_active
-            and membership.can_create_clients
-        )
-
-
-class CanManageCases(BasePermission):
-    """
-    Legal case management (LAWYERS only by default)
-    """
-    def has_permission(self, request, view):
-        user = request.user
-
-        if not user or not user.is_authenticated:
+        if not self.required_permission:
             return False
 
-        if user.role == 'ADMIN':
-            return True
-
         membership = get_membership(user)
 
-        return (
-            membership
-            and membership.is_active
-            and membership.can_manage_cases
-        )
-
-
-class CanViewAllCases(BasePermission):
-    """
-    View all firm cases
-    """
-    def has_permission(self, request, view):
-        user = request.user
-
-        if not user or not user.is_authenticated:
+        if not membership:
             return False
 
-        if user.role == 'ADMIN':
-            return True
-
-        membership = get_membership(user)
-
-        return (
-            membership
-            and membership.is_active
-            and membership.can_view_all_cases
-        )
+        return membership.has_permission(self.required_permission)
 
 
-class CanSchedule(BasePermission):
+# =========================================================
+# SYSTEM RBAC PERMISSIONS
+# =========================================================
+class CanCreateClients(HasFirmPermission):
+    required_permission = 'create_clients'
+
+
+class CanManageCases(HasFirmPermission):
+    required_permission = 'manage_cases'
+
+
+class CanViewAllCases(HasFirmPermission):
+    required_permission = 'view_all_cases'
+
+
+class CanScheduleEvents(HasFirmPermission):
+    required_permission = 'schedule_events'
+
+
+class CanManageDocuments(HasFirmPermission):
+    required_permission = 'manage_documents'
+
+
+class CanManageStaff(HasFirmPermission):
+    required_permission = 'manage_staff'
+
+
+class CanManagePermissions(HasFirmPermission):
+    required_permission = 'manage_permissions'
+
+
+class CanAssignCasesToClients(HasFirmPermission):
     """
-    Calendar / scheduling access
+    FIXED: matches your seed_permissions.py
     """
-    def has_permission(self, request, view):
-        user = request.user
-
-        if not user or not user.is_authenticated:
-            return False
-
-        if user.role == 'ADMIN':
-            return True
-
-        membership = get_membership(user)
-
-        return (
-            membership
-            and membership.is_active
-            and membership.can_schedule
-        )
+    required_permission = 'convert_client_membership'
 
 
-class CanManageDocuments(BasePermission):
-    """
-    Document management
-    """
-    def has_permission(self, request, view):
-        user = request.user
-
-        if not user or not user.is_authenticated:
-            return False
-
-        if user.role == 'ADMIN':
-            return True
-
-        membership = get_membership(user)
-
-        return (
-            membership
-            and membership.is_active
-            and membership.can_manage_documents
-        )
-
-
-# =========================
+# =========================================================
 # DESTRUCTIVE ACTIONS
-# =========================
-
+# =========================================================
 class CanDeleteUser(BasePermission):
-    """
-    Only ADMIN can delete users (staff + clients)
-    """
     def has_permission(self, request, view):
+        user = request.user
+
         return (
-            request.user
-            and request.user.is_authenticated
-            and request.user.role == 'ADMIN'
+            user
+            and user.is_authenticated
+            and user.role == 'ADMIN'
+            and user.is_active
         )

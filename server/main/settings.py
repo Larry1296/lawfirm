@@ -27,8 +27,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Local apps
-    'apps.accounts',
-    # 'apps.accounts.apps.AccountsConfig',
+    'apps.accounts.apps.AccountsConfig',
     'apps.homepage',
     'apps.cases',
     'apps.communications',
@@ -93,7 +92,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTHENTICATION_BACKENDS = [
-    'apps.accounts.auth_backend.EmailBackend', # To explicitly tell django to authenticate using email and password
+    'apps.accounts.auth_backend.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 # INTERNATIONALIZATION
