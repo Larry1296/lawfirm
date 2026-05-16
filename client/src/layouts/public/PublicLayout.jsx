@@ -1,32 +1,18 @@
+import React from "react";
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
 import PublicNavbar from "./PublicNavbar";
-import Footer from "../../components/Footer";
+import Footer from "../../components/shared/Footer";
 
-export default function PublicLayout() {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const progress = Math.min(scrollY / 600, 1);
-  const isLight = progress > 0.5;
-
+const PublicLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* ✅ Pass isLight to navbar */}
-      <PublicNavbar isLight={isLight} />
-
-      {/* ✅ Inject isLight into routed pages (HeroSection lives here) */}
-      <main className="flex-1">
-        <Outlet context={{ isLight }} />
+    <div className="public-layout">
+      <PublicNavbar />
+      <main className="pt-20">
+        <Outlet /> {/* Render the current route's page here */}
       </main>
-
       <Footer />
     </div>
   );
-}
+};
+
+export default PublicLayout;

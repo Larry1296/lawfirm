@@ -1,23 +1,22 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// src/modules/auth/Login.jsx
+import { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShieldCheck, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
-import { login } from "../../../src1/services/usersApi"; // Make sure to import the login API call
-import { useAuthStore } from "../../../src1/stores/authStore"; // Import the Zustand store
-import Card from "../../../components/ui/Card";
-import Button from "../../../components/ui/Button";
-import PasswordInput from "../../../components/ui/PasswordInput";
+import { ShieldCheck, Lock, ArrowLeft } from "lucide-react";
+import { login } from "../../services/usersApi"; // Make sure path is correct
+import AuthContext from "../../core/store/AuthContext"; // R;
+import Card from "../../components/ui/Card";
+import Button3D from "../../components/ui/Button3D";
+import PasswordInput from "../../components/ui/PasswordInput";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
-  // Accessing setAuth function from the Zustand store
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const { login: authLogin } = useContext(AuthContext); // ← use React Context
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,7 +25,6 @@ export default function Login() {
 
     try {
       const res = await login({ email, password });
-
       const data = res.data?.data;
 
       if (!data) {
@@ -43,18 +41,15 @@ export default function Login() {
         return;
       }
 
-      setAuth({ user, access, refresh });
+      // Update auth context
+      authLogin({ user, access, refresh });
 
-      setTimeout(() => {
-        if (user.role === "ADMIN") navigate("/admin/dashboard");
-        else if (user.role === "STAFF") navigate("/staff/dashboard");
-        else navigate("/client/dashboard");
-      }, 0);
+      // Redirect based on role
+      if (user.role === "ADMIN") navigate("/admin/dashboard");
+      else if (user.role === "STAFF") navigate("/staff/dashboard");
+      else navigate("/client/dashboard");
     } catch (err) {
-      console.log("FULL ERROR:", err);
-      console.log("STATUS:", err.response?.status);
-      console.log("RESPONSE DATA:", err.response?.data);
-
+      console.error("Login failed:", err);
       setError("Login failed. Please try again.");
     } finally {
       setLoading(false);
@@ -63,9 +58,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* Left Section */}
+      {/* LEFT SECTION */}
       <div className="lg:w-1/2 bg-blue-700 relative overflow-hidden flex items-center justify-center p-10">
-        {/* Animated blobs */}
         <motion.div
           animate={{ scale: [1, 1.2, 1], x: [0, 40, 0], y: [0, -30, 0] }}
           transition={{ duration: 8, repeat: Infinity }}
@@ -76,7 +70,6 @@ export default function Login() {
           transition={{ duration: 10, repeat: Infinity }}
           className="absolute w-96 h-96 bg-indigo-400/30 rounded-full blur-3xl"
         />
-        {/* Content */}
         <div className="relative text-center text-white max-w-md">
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
@@ -93,10 +86,9 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Right Section */}
+      {/* RIGHT SECTION */}
       <div className="lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
         <Card className="w-full max-w-md p-8">
-          {/* Back link */}
           <Link
             to="/"
             className="flex items-center gap-2 text-sm text-blue-600 mb-6 hover:underline"
@@ -104,15 +96,13 @@ export default function Login() {
             <ArrowLeft size={16} />
             Back to Home
           </Link>
-          {/* Header */}
+
           <div className="flex items-center gap-2 mb-6">
             <Lock className="text-blue-600" />
             <h2 className="text-2xl font-bold">Login</h2>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleLogin} className="space-y-5">
-            {/* Email */}
             <div>
               <label className="text-sm font-medium">Email</label>
               <input
@@ -124,15 +114,12 @@ export default function Login() {
               />
             </div>
 
-            {/* Password */}
             <PasswordInput
-              label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
             />
 
-            {/* Options */}
             <div className="flex justify-between text-sm">
               <label className="flex items-center gap-2">
                 <input type="checkbox" />
@@ -146,19 +133,15 @@ export default function Login() {
               </Link>
             </div>
 
-            {/* Submit Button */}
-            <Button
+            <Button3D
               type="submit"
               variant="primary"
               size="lg"
               className="w-full"
-              loading={loading}
-              loadingText="Logging in..."
             >
-              Login
-            </Button>
+              {loading ? "Logging in..." : "Login"}
+            </Button3D>
 
-            {/* Footer */}
             <p className="text-sm text-center mt-4">
               Don’t have an account?{" "}
               <Link to="/register" className="text-blue-600 font-semibold">
@@ -166,6 +149,7 @@ export default function Login() {
               </Link>
             </p>
           </form>
+
           {error && (
             <div className="text-red-500 mt-2 text-center">{error}</div>
           )}

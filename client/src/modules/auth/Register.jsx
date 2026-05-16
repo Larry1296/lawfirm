@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 import { UserPlus, ShieldCheck, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { register } from "../../../src1/services/usersApi"; // import register API call
-import Card from "../../../components/ui/Card";
-import Button from "../../../components/ui/Button";
+import { register } from "../../../src/services/usersApi"; // import register API call
+import Card from "../../components/ui/Card";
+import Button3D from "../../components/ui/Button3D";
+import PasswordInput from "../../components/ui/PasswordInput";
 
 export default function Register() {
   const [show, setShow] = useState(false);
@@ -154,7 +155,7 @@ export default function Register() {
             </label>
 
             {/* BUTTON */}
-            <Button
+            <Button3D
               type="submit"
               variant="primary"
               size="lg"
@@ -162,7 +163,7 @@ export default function Register() {
               disabled={loading}
             >
               {loading ? "Creating Account..." : "Create Account"}
-            </Button>
+            </Button3D>
           </form>
 
           {error && (

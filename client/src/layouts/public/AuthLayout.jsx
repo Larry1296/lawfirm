@@ -1,5 +1,5 @@
 import PublicNavbar from "./PublicNavbar";
-import Footer from "../../components/Footer";
+import Footer from "../../components/shared/Footer";
 import { Outlet } from "react-router-dom";
 
 export default function AuthLayout() {
