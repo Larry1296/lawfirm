@@ -332,6 +332,40 @@ class ListStaffView(APIView):
             True,
             data=LawFirmMemberSerializer(members, many=True).data
         ))
+    
+
+# =========================================================
+# SINGLE STAFF
+# =========================================================
+class SingleStaffView(APIView):
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get(self, request, user_id):
+
+        firm = getattr(request.user, "owned_firm", None)
+
+        if not firm:
+            return Response(
+                api_response(False, "No firm found"),
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        member = get_object_or_404(
+            LawFirmMember.objects.select_related("user"),
+            user__id=user_id,
+            firm=firm,
+            role__in=["LAWYER", "SECRETARY"]
+        )
+
+        return Response(
+            api_response(
+                True,
+                data=LawFirmMemberSerializer(member).data
+            ),
+            status=status.HTTP_200_OK
+        )
+
+
 
 
 # =========================================================
@@ -356,6 +390,39 @@ class ListClientsView(APIView):
             True,
             data=LawFirmMemberSerializer(clients, many=True).data
         ))
+    
+
+
+# =========================================================
+# SINGLE CLIENT
+# =========================================================
+class SingleClientView(APIView):
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get(self, request, user_id):
+
+        firm = getattr(request.user, "owned_firm", None)
+
+        if not firm:
+            return Response(
+                api_response(False, "No firm found"),
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        client = get_object_or_404(
+            LawFirmMember.objects.select_related("user"),
+            user__id=user_id,
+            firm=firm,
+            role="CLIENT"
+        )
+
+        return Response(
+            api_response(
+                True,
+                data=LawFirmMemberSerializer(client).data
+            ),
+            status=status.HTTP_200_OK
+        )
 
 
 # =========================================================

@@ -149,8 +149,17 @@ class ConvertClientSerializer(serializers.Serializer):
 # =========================
 class LawFirmMemberSerializer(serializers.ModelSerializer):
 
-    email = serializers.EmailField(source='user.email')
+    user_id = serializers.UUIDField(
+        source='user.id',
+        read_only=True
+    )
+
+    email = serializers.EmailField(
+        source='user.email'
+    )
+
     full_name = serializers.SerializerMethodField()
+
     permissions = serializers.SerializerMethodField()
 
     class Meta:
@@ -158,6 +167,7 @@ class LawFirmMemberSerializer(serializers.ModelSerializer):
 
         fields = [
             'id',
+            'user_id',
             'email',
             'full_name',
             'role',
@@ -179,7 +189,6 @@ class LawFirmMemberSerializer(serializers.ModelSerializer):
                 flat=True
             )
         )
-
 
 # =========================
 # CREATE STAFF
