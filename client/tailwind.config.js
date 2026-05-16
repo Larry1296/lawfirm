@@ -2,106 +2,129 @@
 export default {
   darkMode: "class",
 
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
 
   theme: {
     extend: {
+      /* =========================
+       * COLOR SYSTEM (LAW FIRM)
+       * ========================= */
       colors: {
-        /* ===============================
-           LIGHT THEME PALETTE
-           Custom Legal-Tech Identity
-        =============================== */
+        /* Base backgrounds */
+        background: {
+          light: "#F8FAFC",
+          dark: "#0B1220",
+        },
+
+        surface: {
+          light: "#FFFFFF",
+          dark: "#111B2E",
+        },
+
+        border: {
+          light: "#E2E8F0",
+          dark: "#1F2A44",
+        },
+
+        /* Text */
+        text: {
+          primary: {
+            light: "#0F172A",
+            dark: "#E5E7EB",
+          },
+          muted: {
+            light: "#64748B",
+            dark: "#94A3B8",
+          },
+        },
+
+        /* =========================
+         * BRAND (OPTION 1)
+         * ========================= */
         brand: {
-          primary: "#05339C", // strong legal blue
-          secondary: "#1055C9", // active interface blue
-          accent: "#41A67E", // calm trust-building green
-          warning: "#FFE8DB", // warm neutral highlight
+          primary: "#0A2540", // Deep Navy
+          accent: "#C8A24A", // Gold
         },
 
-        /* ===============================
-           DARK THEME PALETTE
-           Derived from Light Theme
-        =============================== */
-        darkbrand: {
-          base: "#041C52", // darker version of primary
-          surface: "#0A2B73", // deepened secondary
-          accent: "#2E7C5E", // muted dark green
-          text: "#F5F7FA", // readable soft white
-          muted: "#B8C5D6", // supporting text
-          highlight: "#FFD8C2", // softened warm neutral
+        /* Dark-mode adjusted accent (optional glow variant) */
+        brandDark: {
+          primary: "#3B82F6", // UI blue highlight
+          accent: "#D4AF37", // brighter gold
         },
 
-        /* ===============================
-           UNIVERSAL UI TOKENS
-        =============================== */
-        ui: {
-          border: "#D9E4F2",
-          muted: "#6B7A90",
-          success: "#41A67E",
-          danger: "#D64545",
-          info: "#1055C9",
+        /* =========================
+         * STATUS COLORS
+         * ========================= */
+        success: "#10B981",
+        warning: "#F59E0B",
+        error: "#EF4444",
+        info: "#3B82F6",
+
+        /* =========================
+         * ROLE COLORS (IMPORTANT FOR YOU)
+         * ========================= */
+        roles: {
+          admin: "#0A2540", // navy (authority)
+          staff: "#1D4ED8", // blue (operations)
+          client: "#059669", // green (trust)
+          secretary: "#7C3AED", // purple (support)
+          lawyer: "#0A2540", // same as admin navy tone
         },
       },
 
+      /* =========================
+       * TYPOGRAPHY
+       * ========================= */
       fontFamily: {
-        sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["Poppins", "ui-sans-serif", "system-ui"],
+        display: ["Poppins", "ui-sans-serif"],
       },
 
+      fontSize: {
+        xs: ["12px", "16px"],
+        sm: ["14px", "20px"],
+        base: ["16px", "24px"],
+        lg: ["18px", "28px"],
+        xl: ["20px", "30px"],
+        "2xl": ["24px", "36px"],
+        "3xl": ["30px", "40px"],
+        "4xl": ["36px", "44px"],
+      },
+
+      /* =========================
+       * SHADOWS (LAW FIRM STYLE)
+       * ========================= */
       boxShadow: {
-        soft: "0 4px 14px rgba(5,51,156,0.08)",
-        card: "0 10px 25px rgba(5,51,156,0.12)",
-        glow: "0 0 0 3px rgba(16,85,201,0.18)",
-        darkcard: "0 10px 30px rgba(2,18,56,0.55)",
+        soft: "0 2px 10px rgba(0,0,0,0.06)",
+        medium: "0 6px 18px rgba(0,0,0,0.10)",
+        strong: "0 12px 30px rgba(0,0,0,0.15)",
       },
 
+      /* =========================
+       * BORDER RADIUS
+       * ========================= */
       borderRadius: {
-        xl2: "1rem",
-        xl3: "1.25rem",
-        xl4: "1.5rem",
+        xl: "14px",
+        "2xl": "18px",
       },
 
-      backgroundImage: {
-        "hero-light":
-          "linear-gradient(135deg, #05339C 0%, #1055C9 50%, #41A67E 100%)",
-
-        "hero-dark":
-          "linear-gradient(135deg, #041C52 0%, #0A2B73 55%, #2E7C5E 100%)",
-
-        "card-light": "linear-gradient(180deg, #FFFFFF 0%, #FFE8DB 100%)",
-
-        "card-dark": "linear-gradient(180deg, #0A2B73 0%, #041C52 100%)",
-      },
-
+      /* =========================
+       * ANIMATIONS (UI POLISH)
+       * ========================= */
       keyframes: {
-        float: {
-          "0%,100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-6px)" },
-        },
-
         fadeIn: {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
+          "0%": { opacity: 0, transform: "translateY(8px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
         },
-
-        pulseGlow: {
-          "0%,100%": { boxShadow: "0 0 0 0 rgba(16,85,201,0.30)" },
-          "50%": { boxShadow: "0 0 0 8px rgba(16,85,201,0)" },
+        slideIn: {
+          "0%": { opacity: 0, transform: "translateX(-10px)" },
+          "100%": { opacity: 1, transform: "translateX(0)" },
         },
       },
 
       animation: {
-        float: "float 4s ease-in-out infinite",
-        fadeIn: "fadeIn 0.5s ease-out",
-        pulseGlow: "pulseGlow 2s infinite",
-      },
-
-      maxWidth: {
-        dashboard: "1600px",
-      },
-
-      transitionTimingFunction: {
-        smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fadeIn: "fadeIn 0.25s ease-out",
+        slideIn: "slideIn 0.25s ease-out",
       },
     },
   },

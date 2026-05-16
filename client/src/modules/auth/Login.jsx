@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShieldCheck, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
-import { login } from "../../../services/usersApi"; // Make sure to import the login API call
-import { useAuthStore } from "../../../stores/authStore"; // Import the Zustand store
+import { login } from "../../../src1/services/usersApi"; // Make sure to import the login API call
+import { useAuthStore } from "../../../src1/stores/authStore"; // Import the Zustand store
 import Card from "../../../components/ui/Card";
 import Button from "../../../components/ui/Button";
 import PasswordInput from "../../../components/ui/PasswordInput";

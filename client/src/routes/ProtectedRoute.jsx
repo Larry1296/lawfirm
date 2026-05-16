@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAuthStore } from "../stores/authStore";
+import { useAuthStore } from "../../src1/stores/authStore";
 
 export default function ProtectedRoute({ allowedRoles, children }) {
   const { user, loading } = useAuthStore();

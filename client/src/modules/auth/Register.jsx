@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { UserPlus, ShieldCheck, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { register } from "../../../services/usersApi"; // import register API call
+import { register } from "../../../src1/services/usersApi"; // import register API call
 import Card from "../../../components/ui/Card";
 import Button from "../../../components/ui/Button";
 
