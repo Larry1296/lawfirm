@@ -1,5 +1,5 @@
 import Card from "../../../components/ui/Card";
-import Button from "../../../components/ui/Button";
+import Button3D from "../../../components/ui/Button3D";
 
 export default function CTASection() {
   return (
@@ -16,15 +16,15 @@ export default function CTASection() {
             Join firms using LegalAssist to save time and stay organized.
           </p>
 
-          {/* CTA Button */}
+          {/* CTA Button3D */}
           <div className="mt-10 flex justify-center">
-            <Button
+            <Button3D
               size="lg"
               variant="primary"
               className="px-10 py-4 text-base"
             >
               Get Started
-            </Button>
+            </Button3D>
           </div>
         </Card>
       </div>

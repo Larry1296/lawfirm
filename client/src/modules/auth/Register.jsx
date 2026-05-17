@@ -1,41 +1,60 @@
+// src/modules/auth/Register.jsx
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { UserPlus, ShieldCheck, ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { register } from "../../../src/services/usersApi"; // import register API call
+
+import { register } from "../../services/usersApi";
 import Card from "../../components/ui/Card";
 import Button3D from "../../components/ui/Button3D";
-import PasswordInput from "../../components/ui/PasswordInput";
+import FloatingInput from "../../components/ui/FloatingInput";
 
 export default function Register() {
-  const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    nationalId: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+
     const formData = {
-      full_name: e.target.full_name.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
+      full_name: form.fullName,
+      email: form.email,
+      national_id: form.nationalId,
+      phone_number: form.phoneNumber,
+      password: form.password,
     };
 
-    console.log("Form Data Sent:", formData);
     try {
-      const res = await register(formData); // Call your register API
-
-      // On success
-      console.log(res.data); // Handle your response (store tokens, etc.)
-      navigate("/login"); // Or auto-login and redirect to dashboard
+      const res = await register(formData);
+      console.log("Registration successful:", res.data);
+      navigate("/login");
     } catch (err) {
-      setError("Registration failed. Please try again.", err);
-      console.error(
-        "Registration failed:",
-        error.response?.data || error.message,
+      console.error("Registration failed:", err.response?.data || err.message);
+      setError(
+        err.response?.data?.message || "Registration failed. Try again.",
       );
     } finally {
       setLoading(false);
@@ -44,22 +63,18 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* ================= LEFT SECTION ================= */}
+      {/* LEFT SECTION */}
       <div className="lg:w-1/2 bg-blue-700 relative overflow-hidden flex items-center justify-center p-10">
-        {/* Animated blobs */}
         <motion.div
           animate={{ scale: [1, 1.2, 1], x: [0, 40, 0], y: [0, -30, 0] }}
           transition={{ duration: 8, repeat: Infinity }}
           className="absolute w-96 h-96 bg-blue-500/40 rounded-full blur-3xl"
         />
-
         <motion.div
           animate={{ scale: [1, 1.3, 1], x: [0, -50, 0], y: [0, 40, 0] }}
           transition={{ duration: 10, repeat: Infinity }}
           className="absolute w-96 h-96 bg-indigo-400/30 rounded-full blur-3xl"
         />
-
-        {/* Content */}
         <div className="relative text-center text-white max-w-md">
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
@@ -70,7 +85,6 @@ export default function Register() {
           </motion.div>
 
           <h1 className="text-4xl font-bold mb-4">Create Your Account</h1>
-
           <p className="text-blue-100">
             Join LegalAssist and start managing your legal cases securely and
             efficiently.
@@ -82,10 +96,9 @@ export default function Register() {
         </div>
       </div>
 
-      {/* ================= RIGHT SECTION ================= */}
+      {/* RIGHT SECTION */}
       <div className="lg:w-1/2 flex items-start justify-center pt-36 md:pt-40 lg:pt-44 p-8 bg-orange-50">
         <Card className="w-full max-w-md p-8">
-          {/* Back link */}
           <Link
             to="/"
             className="flex items-center gap-2 text-sm text-blue-600 mb-6 hover:underline"
@@ -93,68 +106,60 @@ export default function Register() {
             <ArrowLeft size={16} />
             Back to Home
           </Link>
-          {/* HEADER */}
+
           <div className="flex items-center gap-2 mb-6">
             <UserPlus className="text-blue-600" />
             <h2 className="text-2xl font-bold">Register</h2>
           </div>
 
           <form onSubmit={handleRegister} className="space-y-5">
-            {/* FULL NAME */}
-            <div>
-              <label className="text-sm font-medium">Full Name</label>
-              <input
-                name="full_name"
-                type="text"
-                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Name"
-              />
-            </div>
+            <FloatingInput
+              label="Full Name"
+              name="fullName"
+              value={form.fullName}
+              onChange={handleChange}
+              required
+            />
+            <FloatingInput
+              label="Email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+            <FloatingInput
+              label="National ID"
+              name="nationalId"
+              value={form.nationalId}
+              onChange={handleChange}
+              required
+            />
+            <FloatingInput
+              label="Phone Number"
+              name="phoneNumber"
+              type="tel"
+              value={form.phoneNumber}
+              onChange={handleChange}
+              required
+            />
+            <FloatingInput
+              label="Password"
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+            <FloatingInput
+              label="Repeat Password"
+              name="confirmPassword"
+              type="password"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              required
+            />
 
-            {/* EMAIL */}
-            <div>
-              <label className="text-sm font-medium">Email</label>
-              <input
-                name="email"
-                type="email"
-                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Email"
-              />
-            </div>
-
-            {/* PASSWORD */}
-            <div>
-              <label className="text-sm font-medium">Password</label>
-              <input
-                name="password"
-                type={show ? "text" : "password"}
-                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Password"
-              />
-            </div>
-
-            {/* CONFIRM PASSWORD */}
-            <div>
-              <label className="text-sm font-medium">Confirm Password</label>
-              <input
-                name="confirm_password"
-                type={show ? "text" : "password"}
-                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Repeat Password"
-              />
-            </div>
-
-            {/* SHOW PASSWORD */}
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={show}
-                onChange={() => setShow(!show)}
-              />
-              Show password
-            </label>
-
-            {/* BUTTON */}
             <Button3D
               type="submit"
               variant="primary"
@@ -164,11 +169,11 @@ export default function Register() {
             >
               {loading ? "Creating Account..." : "Create Account"}
             </Button3D>
-          </form>
 
-          {error && (
-            <div className="text-red-500 mt-2 text-center">{error}</div>
-          )}
+            {error && (
+              <div className="text-red-500 mt-2 text-center">{error}</div>
+            )}
+          </form>
 
           <p className="text-sm text-center mt-6">
             Already have an account?{" "}

@@ -9,7 +9,7 @@ import {
 
 import SectionHeading from "../../../components/ui/SectionHeading";
 import Card from "../../../components/ui/Card";
-import Button from "../../../components/ui/Button";
+import Button3D from "../../../components/ui/Button3D";
 
 export default function ServicesSection() {
   const services = [
@@ -82,9 +82,9 @@ export default function ServicesSection() {
           Speak with our experts today and get professional legal guidance.
         </p>
 
-        <Button variant="primary" size="lg">
+        <Button3D variant="primary" size="lg">
           Book Consultation
-        </Button>
+        </Button3D>
       </Card>
     </section>
   );

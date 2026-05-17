@@ -7,21 +7,20 @@ export default function HeroSection() {
   const rows = 6;
   const grid = [];
 
+  // Generate grid positions
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      grid.push({
-        x: (x - cols / 2) * 80,
-        y: (y - rows / 2) * 80,
-        delay: (x + y) * 0.05,
-      });
+      const offsetX = (x - cols / 2) * 80;
+      const offsetY = (y - rows / 2) * 80;
+      grid.push({ x: offsetX, y: offsetY, delay: (x + y) * 0.05 });
     }
   }
 
   const colors = [
-    "bg-blue-400/20",
-    "bg-indigo-400/20",
-    "bg-cyan-300/20",
-    "bg-sky-400/20",
+    "bg-blue-400/30",
+    "bg-indigo-400/30",
+    "bg-cyan-300/30",
+    "bg-sky-400/30",
   ];
 
   return (
@@ -40,22 +39,27 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* Subtle animated grid/bricks */}
+      {/* Animated bricks moving to center */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         {grid.map((b, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 0.5, x: b.x + 60, y: b.y - 60 }}
-            animate={{ opacity: 1, scale: 1, x: b.x, y: b.y }}
+            initial={{ x: b.x, y: b.y, scale: 0.5, opacity: 0.3 }}
+            animate={{
+              x: [b.x, 0, b.x],
+              y: [b.y, 0, b.y],
+              scale: [0.5, 1, 0.5],
+              opacity: [0.3, 1, 0.3],
+            }}
             transition={{
               delay: b.delay,
-              duration: 2.5,
+              duration: 3 + (i % 3) * 0.2,
               repeat: Infinity,
-              repeatType: "mirror",
+              repeatType: "loop",
               ease: "easeInOut",
             }}
-            className={`${colors[i % colors.length]} border border-white/10 shadow-lg`}
-            style={{ width: 12, height: 12, borderRadius: 4 }}
+            className={`${colors[i % colors.length]} border border-white/20 shadow-lg`}
+            style={{ width: 14, height: 14, borderRadius: 4 }}
           />
         ))}
       </div>
@@ -81,37 +85,32 @@ export default function HeroSection() {
           platform.
         </motion.p>
 
-        {/* Primary CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 1 }}
           className="mt-10 flex flex-wrap justify-center gap-4"
         >
-          {/* Register Button */}
           <motion.div
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
             <Link to="/register">
-              <Button3D text="Start Free" variant="primary" size="lg" />
+              <Button3D size="lg" variant="primary">
+                Start Free
+              </Button3D>
             </Link>
           </motion.div>
 
-          {/* Login Button */}
           <motion.div
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Link to="/login">
-              <Button3D
-                text="Member Login"
-                size="lg"
-                className="border-yellow-400 text-yellow-600 hover:bg-yellow-50"
-                variant="outlineLight"
-              />
-            </Link>
-          </motion.div>
+          ></motion.div>
+          <Link to="/login">
+            <Button3D size="lg" variant="darkAccent">
+              Member Login
+            </Button3D>
+          </Link>
         </motion.div>
       </div>
     </section>

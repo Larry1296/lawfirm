@@ -3,11 +3,11 @@ import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShieldCheck, Lock, ArrowLeft } from "lucide-react";
-import { login } from "../../services/usersApi"; // Make sure path is correct
-import AuthContext from "../../core/store/AuthContext"; // R;
+import { login } from "../../services/usersApi";
+import AuthContext from "../../core/store/AuthContext";
 import Card from "../../components/ui/Card";
 import Button3D from "../../components/ui/Button3D";
-import PasswordInput from "../../components/ui/PasswordInput";
+import FloatingInput from "../../components/ui/FloatingInput";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const { login: authLogin } = useContext(AuthContext); // ← use React Context
+  const { login: authLogin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -41,10 +41,8 @@ export default function Login() {
         return;
       }
 
-      // Update auth context
       authLogin({ user, access, refresh });
 
-      // Redirect based on role
       if (user.role === "ADMIN") navigate("/admin/dashboard");
       else if (user.role === "STAFF") navigate("/staff/dashboard");
       else navigate("/client/dashboard");
@@ -103,21 +101,22 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="text-sm font-medium">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full mt-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Email"
-              />
-            </div>
+            {/* Email */}
+            <FloatingInput
+              label="Email"
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-            <PasswordInput
+            {/* Password */}
+            <FloatingInput
+              label="Password"
+              type="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
             />
 
             <div className="flex justify-between text-sm">

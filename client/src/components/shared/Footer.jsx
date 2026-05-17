@@ -4,12 +4,12 @@ import Brand from "../../components/ui/Brand";
 
 export default function Footer() {
   return (
-    <footer className="bg-[color:var(--surface-light)] dark:bg-[color:var(--surface)] text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)] mt-auto">
+    <footer className="bg-[color:var(--brand-primary)] text-white mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-10">
         {/* LOGO / ABOUT */}
         <div>
           <Brand size="h-16 w-16" textSize="text-2xl" />
-          <p className="mt-4 text-sm text-[color:var(--text-muted-light)] dark:text-[color:var(--text-muted-dark)]">
+          <p className="mt-4 text-sm text-white/80">
             Professional legal services you can trust. We provide reliable and
             efficient legal solutions tailored to your needs.
           </p>
@@ -17,10 +17,8 @@ export default function Footer() {
 
         {/* CONTACT */}
         <div>
-          <h3 className="font-semibold mb-4 text-[color:var(--brand-primary)] dark:text-[color:var(--brand-accent)]">
-            Contact
-          </h3>
-          <div className="space-y-3 text-sm text-[color:var(--text-muted-light)] dark:text-[color:var(--text-muted-dark)]">
+          <h3 className="font-semibold mb-4 text-white/90">Contact</h3>
+          <div className="space-y-3 text-sm text-white/70">
             <div className="flex items-center gap-2">
               <MapPin size={16} />
               <span>Nairobi, Kenya</span>
@@ -38,26 +36,15 @@ export default function Footer() {
 
         {/* SOCIAL */}
         <div>
-          <h3 className="font-semibold mb-4 text-[color:var(--brand-primary)] dark:text-[color:var(--brand-accent)]">
-            Follow Us
-          </h3>
-          <div className="flex gap-4 text-[color:var(--brand-primary)] dark:text-[color:var(--brand-accent)]">
-            <a
-              href="#"
-              className="hover:text-[color:var(--brand-accent)] transition"
-            >
+          <h3 className="font-semibold mb-4 text-white/90">Follow Us</h3>
+          <div className="flex gap-4 text-white/80">
+            <a href="#" className="hover:text-white transition">
               <FaFacebook />
             </a>
-            <a
-              href="#"
-              className="hover:text-[color:var(--brand-accent)] transition"
-            >
+            <a href="#" className="hover:text-white transition">
               <FaTwitter />
             </a>
-            <a
-              href="#"
-              className="hover:text-[color:var(--brand-accent)] transition"
-            >
+            <a href="#" className="hover:text-white transition">
               <FaLinkedin />
             </a>
           </div>
@@ -65,7 +52,7 @@ export default function Footer() {
       </div>
 
       {/* BOTTOM */}
-      <div className="border-t border-[color:var(--border-light)] dark:border-[color:var(--border)] text-center py-4 text-sm text-[color:var(--text-muted-light)] dark:text-[color:var(--text-muted-dark)]">
+      <div className="border-t border-white/30 text-center py-4 text-sm text-white/70">
         © {new Date().getFullYear()} Sheria Desk. All rights reserved.
       </div>
     </footer>

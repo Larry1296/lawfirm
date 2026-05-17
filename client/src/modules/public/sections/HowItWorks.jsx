@@ -2,7 +2,7 @@ import { FileText, UserCheck, Scale, CheckCircle } from "lucide-react";
 
 import SectionHeading from "../../../components/ui/SectionHeading";
 import Card from "../../../components/ui/Card";
-import Button from "../../../components/ui/Button";
+import Button3D from "../../../components/ui/Button3D";
 
 export default function HowItWorks() {
   const steps = [
@@ -67,9 +67,9 @@ export default function HowItWorks() {
           Begin your legal journey today with trusted professionals.
         </p>
 
-        <Button variant="primary" size="lg">
+        <Button3D variant="primary" size="lg">
           Start Your Case
-        </Button>
+        </Button3D>
       </Card>
     </section>
   );

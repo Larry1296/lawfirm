@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import ThemeContext from "./ThemeContext";
 
 const ThemeProvider = ({ children }) => {
@@ -8,23 +7,18 @@ const ThemeProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    document.documentElement.className = theme;
+    const root = document.documentElement;
+    if (theme === "dark") root.classList.add("dark");
+    else root.classList.remove("dark");
 
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const toggleTheme = () => {
+  const toggleTheme = () =>
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
 
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        setTheme,
-        toggleTheme,
-      }}
-    >
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

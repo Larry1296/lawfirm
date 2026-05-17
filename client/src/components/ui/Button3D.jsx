@@ -1,15 +1,16 @@
-// src/components/ui/Button3D.jsx
-import React from "react";
+import React, { useContext } from "react";
+import ThemeContext from "../../core/store/ThemeContext";
 
 export default function Button3D({
-  text,
+  children,
   onClick,
   type = "button",
   className = "",
-  variant = "primary", // primary, success, outlineLight, accent
+  variant = "primary", // primary, success, accent, outlineLight, darkAccent
   size = "md", // sm, md, lg
 }) {
-  // Base 3D styling
+  const { theme } = useContext(ThemeContext); // get current theme
+
   const base = `
     rounded-xl font-semibold shadow-[0_6px_0_rgba(0,0,0,0.2)]
     active:shadow-[0_2px_0_rgba(0,0,0,0.15)]
@@ -23,17 +24,34 @@ export default function Button3D({
   else if (size === "md") sizeClass = "px-6 py-3 text-base";
   else if (size === "lg") sizeClass = "px-8 py-4 text-lg";
 
-  // Variant styles
+  // Variant styles with theme awareness
   let variantClass = "";
   if (variant === "primary")
-    variantClass = "bg-blue-500 text-white hover:bg-blue-600";
+    variantClass =
+      theme === "dark"
+        ? "bg-brand-primary text-text-primary-dark hover:bg-blue-700"
+        : "bg-brand-primary text-white hover:bg-blue-600";
   else if (variant === "success")
-    variantClass = "bg-green-500 text-white hover:bg-green-600";
+    variantClass =
+      theme === "dark"
+        ? "bg-success text-text-primary-dark hover:bg-green-600"
+        : "bg-success text-white hover:bg-green-500";
   else if (variant === "accent")
-    variantClass = "bg-purple-500 text-white hover:bg-purple-600";
+    variantClass =
+      theme === "dark"
+        ? "bg-brand-accent text-text-primary-dark hover:bg-yellow-500"
+        : "bg-brand-accent text-white hover:bg-yellow-400";
   else if (variant === "outlineLight")
     variantClass =
-      "bg-transparent border-2 border-blue-500 text-blue-600 hover:bg-blue-50";
+      theme === "dark"
+        ? "bg-transparent border-2 border-brand-primary text-text-primary-dark hover:bg-blue-900"
+        : "bg-transparent border-2 border-brand-primary text-blue-600 hover:bg-blue-50";
+  else if (variant === "darkAccent")
+    // ✅ NEW VARIANT
+    variantClass =
+      theme === "dark"
+        ? "bg-purple-800 text-white hover:bg-purple-900"
+        : "bg-purple-700 text-white hover:bg-purple-800";
 
   return (
     <button
@@ -41,7 +59,7 @@ export default function Button3D({
       onClick={onClick}
       className={`${base} ${sizeClass} ${variantClass} ${className}`}
     >
-      {text}
+      {children}
     </button>
   );
 }

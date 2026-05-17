@@ -1,7 +1,7 @@
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import SectionHeading from "../../../components/ui/SectionHeading";
 import Card from "../../../components/ui/Card";
-import Button from "../../../components/ui/Button";
+import Button3D from "../../../components/ui/Button3D";
 
 export default function ContactSection() {
   return (
@@ -78,10 +78,10 @@ export default function ContactSection() {
               className="w-full px-4 py-3 border rounded-xl"
             />
 
-            <Button variant="primary" className="w-full">
+            <Button3D variant="primary" className="w-full">
               <Send size={18} className="mr-2" />
               Send Message
-            </Button>
+            </Button3D>
           </form>
         </Card>
       </div>
