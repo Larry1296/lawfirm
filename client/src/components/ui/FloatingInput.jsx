@@ -21,29 +21,29 @@ export default function FloatingInput({
   const inputType = isPassword && showPassword ? "text" : type;
 
   // Theme-based classes
-  const bgClass = theme === "dark" ? "bg-surface-dark" : "bg-surface-light";
-  const borderClass =
-    theme === "dark" ? "border-border-dark" : "border-border-light";
-  const textClass =
-    theme === "dark" ? "text-text-primary-dark" : "text-text-primary-light";
-  const labelFocusClass =
-    theme === "dark"
-      ? "peer-focus:text-brand-primary"
-      : "peer-focus:text-brand-primary";
+  const bgClass = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const borderClass = theme === "dark" ? "border-gray-600" : "border-gray-300";
+  const textClass = theme === "dark" ? "text-white" : "text-gray-900";
+  const labelActiveColor =
+    theme === "dark" ? "text-brand-primary" : "text-brand-primary";
+  const labelInactiveColor = "text-gray-400";
+
+  // Should label float?
+  const floatLabel = focused || value;
 
   return (
-    <div className={`relative w-full mb-4 ${className}`}>
-      {/* Input Container */}
+    <div className={`relative w-full mb-6 ${className}`}>
+      {/* Input container */}
       <div
         className={`
           relative w-full rounded-xl border transition-all duration-200
           ${bgClass} ${borderClass}
-          shadow-soft
-          ${focused ? "translate-y-[-2px] shadow-medium" : ""}
+          shadow-sm
+          ${focused ? "translate-y-[-1px] shadow-md" : ""}
           ${disabled ? "opacity-60 cursor-not-allowed" : ""}
         `}
       >
-        {/* Actual Input */}
+        {/* Actual input */}
         <input
           id={name}
           name={name}
@@ -57,33 +57,26 @@ export default function FloatingInput({
           className={`
             w-full px-4 py-4 rounded-xl bg-transparent outline-none
             ${textClass}
-            placeholder:text-transparent
-            peer
           `}
         />
 
-        {/* Floating Label */}
+        {/* Floating label */}
         {label && (
           <label
             htmlFor={name}
             className={`
-              absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm
-              transition-all duration-200
-              peer-placeholder-shown:top-1/2
-              peer-placeholder-shown:text-base
-              peer-placeholder-shown:text-gray-400
-              peer-focus:top-0
-              peer-focus:-translate-y-2
-              peer-focus:text-sm
-              ${labelFocusClass}
+              absolute left-4 transition-all duration-200
               pointer-events-none
+              ${floatLabel ? "-top-3 text-sm font-semibold" : "top-1/2 text-base font-normal"}
+              ${floatLabel ? labelActiveColor : labelInactiveColor}
+              transform -translate-y-1/2
             `}
           >
             {label}
           </label>
         )}
 
-        {/* Password Toggle */}
+        {/* Password toggle */}
         {isPassword && (
           <button
             type="button"

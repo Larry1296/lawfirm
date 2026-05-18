@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
 import {
+  X,
   LayoutDashboard,
   Briefcase,
   Users,
@@ -12,11 +12,11 @@ import {
   ShieldCheck,
   Settings,
   UserCog,
-  X,
 } from "lucide-react";
-
-import Button from "../../components/ui/Button";
 import LogoutButton from "../../components/ui/LogoutButton";
+import SidebarNavLink from "../../components/ui/SidebarNavLink";
+import { useContext } from "react";
+import ThemeContext from "../../core/store/ThemeContext";
 
 const links = [
   {
@@ -51,15 +51,21 @@ const links = [
 ];
 
 export default function AdminSidebar({ onClose }) {
+  const { theme } = useContext(ThemeContext);
+
+  const bgSidebar =
+    theme === "dark"
+      ? "bg-[color:var(--surface-dark)] text-white"
+      : "bg-[color:var(--brand-primary)] text-white";
+
   return (
-    <aside className="w-64 h-full bg-blue-900 text-white flex flex-col shadow-2xl">
+    <aside className={`w-64 h-full ${bgSidebar} flex flex-col shadow-2xl`}>
       {/* HEADER */}
       <div className="p-5 border-b border-white/10 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold">LawFirm</h1>
           <p className="text-xs text-white/60">Admin Panel</p>
         </div>
-
         <button
           onClick={() => window.innerWidth < 1024 && onClose?.()}
           className="lg:hidden p-2 rounded hover:bg-white/10"
@@ -71,26 +77,21 @@ export default function AdminSidebar({ onClose }) {
       {/* NAV */}
       <nav className="flex-1 p-3 space-y-2 overflow-y-auto">
         {links.map((link) => (
-          <NavLink
+          <SidebarNavLink
             key={link.name}
             to={link.path}
-            end={link.end || false}
+            end={link.end}
+            icon={link.icon}
             onClick={onClose}
-            className="block"
           >
-            {({ isActive }) => (
-              <Button variant="sidebar" isActive={isActive}>
-                {link.icon}
-                <span className="font-medium">{link.name}</span>
-              </Button>
-            )}
-          </NavLink>
+            {link.name}
+          </SidebarNavLink>
         ))}
       </nav>
 
       {/* FOOTER */}
-      <div className="p-4 border-t border-white/10">
-        <LogoutButton onLogout={onClose} />
+      <div className="p-4 mt-auto">
+        <LogoutButton variant="warning" />
       </div>
     </aside>
   );

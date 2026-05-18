@@ -1,17 +1,16 @@
-import React, { useContext } from "react";
-import ThemeContext from "../../core/store/ThemeContext";
-
 export default function Card({ children, className = "" }) {
-  const { theme } = useContext(ThemeContext);
-
-  // Dynamic background and text based on theme
-  const bgClass =
-    theme === "dark"
-      ? "bg-surface-dark text-text-primary-dark"
-      : "bg-surface-light text-text-primary-light";
-
   return (
-    <div className={`rounded-2xl shadow-soft p-6 ${bgClass} ${className}`}>
+    <div
+      className={`
+        bg-white
+        rounded-2xl
+        shadow-[0_10px_0_rgba(0,0,0,0.08)]
+        hover:shadow-[0_14px_0_rgba(0,0,0,0.12)]
+        transition-all duration-200
+        active:translate-y-1
+        ${className}
+      `}
+    >
       {children}
     </div>
   );

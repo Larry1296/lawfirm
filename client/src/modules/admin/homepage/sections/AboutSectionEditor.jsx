@@ -1,25 +1,14 @@
+// src/modules/admin/homepage/sections/AboutSectionEditorPage.jsx
 import { useState } from "react";
 import { Input3D } from "../../../../components/ui/Input3D";
 import { Textarea3D } from "../../../../components/ui/TextArea3D";
 
 import { ShieldCheck, Scale, Gavel, Users } from "lucide-react";
 
-/* =========================
-   ICON MAP
-========================= */
-const iconOptions = {
-  ShieldCheck,
-  Scale,
-  Gavel,
-  Users,
-};
+const iconOptions = { ShieldCheck, Scale, Gavel, Users };
 
-/* =========================
-   INITIAL DATA
-========================= */
 const initialData = {
   enabled: true,
-
   title: "About Our Legal Practice",
   subtitle:
     "We are a modern law firm dedicated to delivering trusted legal solutions with precision, confidentiality, and excellence.",
@@ -42,6 +31,7 @@ const initialData = {
   ],
 
   missionTitle: "Our Mission",
+
   missionText:
     "We combine traditional legal excellence with modern technology to deliver faster, smarter, and more accessible legal services.",
 
@@ -51,32 +41,18 @@ const initialData = {
 export default function AboutSectionEditorPage() {
   const [data, setData] = useState(initialData);
 
-  /* =========================
-     UPDATE HEADER
-  ========================= */
-  const updateField = (field, value) => {
-    setData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const updateField = (field, value) =>
+    setData((prev) => ({ ...prev, [field]: value }));
 
-  /* =========================
-     UPDATE ITEM
-  ========================= */
-  const updateItem = (id, key, value) => {
+  const updateItem = (id, key, value) =>
     setData((prev) => ({
       ...prev,
       items: prev.items.map((item) =>
         item.id === id ? { ...item, [key]: value } : item,
       ),
     }));
-  };
 
-  /* =========================
-     ADD ITEM
-  ========================= */
-  const addItem = () => {
+  const addItem = () =>
     setData((prev) => ({
       ...prev,
       items: [
@@ -89,25 +65,17 @@ export default function AboutSectionEditorPage() {
         },
       ],
     }));
-  };
 
-  /* =========================
-     DELETE ITEM
-  ========================= */
-  const deleteItem = (id) => {
+  const deleteItem = (id) =>
     setData((prev) => ({
       ...prev,
       items: prev.items.filter((item) => item.id !== id),
     }));
-  };
 
-  /* =========================
-     MOVE
-  ========================= */
   const moveItem = (index, direction) => {
     const list = [...data.items];
-
     const newIndex = index + direction;
+
     if (newIndex < 0 || newIndex >= list.length) return;
 
     [list[index], list[newIndex]] = [list[newIndex], list[index]];
@@ -119,25 +87,46 @@ export default function AboutSectionEditorPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 animate-fadeIn">
       {/* ================= HEADER ================= */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">About Section</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark">
+            About Section
+          </h1>
 
+          <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
+            Manage about section content and firm story
+          </p>
+        </div>
+
+        {/* ENABLE / DISABLE */}
         <button
           onClick={() => updateField("enabled", !data.enabled)}
-          className={`px-4 py-2 rounded-lg ${
-            data.enabled ? "bg-green-100 text-green-700" : "bg-gray-200"
+          className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
+            data.enabled
+              ? "bg-success/20 text-success"
+              : "bg-surface-light dark:bg-surface-dark text-text-muted-light dark:text-text-muted-dark"
           }`}
         >
           {data.enabled ? "Enabled" : "Disabled"}
         </button>
       </div>
 
+      {/* ================= GRID ================= */}
       <div className="grid lg:grid-cols-2 gap-6">
-        {/* ================= LEFT ================= */}
-        <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-          <h2 className="font-semibold">Section Content</h2>
+        {/* ================= LEFT SIDE ================= */}
+        <div
+          className="
+            bg-surface-light dark:bg-surface-dark
+            border border-border-light dark:border-border-dark
+            shadow-soft rounded-2xl
+            p-6 space-y-4
+          "
+        >
+          <h2 className="font-semibold text-lg text-text-primary-light dark:text-text-primary-dark">
+            Section Content
+          </h2>
 
           <Input3D
             label="Title"
@@ -154,69 +143,128 @@ export default function AboutSectionEditorPage() {
           {/* ADD ITEM */}
           <button
             onClick={addItem}
-            className="w-full bg-blue-900 text-white py-2 rounded-lg"
+            className="
+              w-full py-3 rounded-xl
+              bg-brand-primary text-white
+              shadow-soft hover:opacity-90
+              transition
+            "
           >
             + Add Item
           </button>
 
           {/* ITEMS */}
-          <div className="space-y-4">
-            {data.items.map((item, index) => {
-              const Icon = iconOptions[item.icon];
+          {data.items.map((item, index) => {
+            const Icon = iconOptions[item.icon];
 
-              return (
-                <div key={item.id} className="border rounded-xl p-4 space-y-3">
-                  {/* ICON SELECT */}
-                  <select
-                    value={item.icon}
-                    onChange={(e) =>
-                      updateItem(item.id, "icon", e.target.value)
-                    }
-                    className="w-full border rounded p-2"
+            return (
+              <div
+                key={item.id}
+                className="
+                  border rounded-2xl p-4 space-y-3
+                  border-border-light dark:border-border-dark
+                  bg-background-light dark:bg-background-dark
+                "
+              >
+                {/* ICON PREVIEW */}
+                <div className="flex items-center gap-3">
+                  <div
+                    className="
+                      w-10 h-10 rounded-xl
+                      flex items-center justify-center
+                      bg-brand-primary/10 text-brand-primary
+                    "
                   >
-                    {Object.keys(iconOptions).map((key) => (
-                      <option key={key}>{key}</option>
-                    ))}
-                  </select>
+                    {Icon && <Icon size={20} />}
+                  </div>
 
-                  {/* TITLE */}
-                  <Input3D
-                    label="Title"
-                    value={item.title}
-                    onChange={(val) => updateItem(item.id, "title", val)}
-                  />
+                  <p className="font-medium text-text-primary-light dark:text-text-primary-dark">
+                    Feature Icon
+                  </p>
+                </div>
 
-                  {/* DESC */}
-                  <Textarea3D
-                    label="Description"
-                    value={item.description}
-                    onChange={(val) => updateItem(item.id, "description", val)}
-                  />
+                {/* ICON SELECT */}
+                <select
+                  value={item.icon}
+                  onChange={(e) => updateItem(item.id, "icon", e.target.value)}
+                  className="
+                    w-full rounded-xl p-3 outline-none
+                    bg-surface-light dark:bg-surface-dark
+                    border border-border-light dark:border-border-dark
+                    text-text-primary-light dark:text-text-primary-dark
+                  "
+                >
+                  {Object.keys(iconOptions).map((key) => (
+                    <option key={key}>{key}</option>
+                  ))}
+                </select>
 
-                  {/* ACTIONS */}
-                  <div className="flex justify-between text-sm">
-                    <div className="flex gap-2">
-                      <button onClick={() => moveItem(index, -1)}>↑</button>
+                {/* TITLE */}
+                <Input3D
+                  label="Title"
+                  value={item.title}
+                  onChange={(val) => updateItem(item.id, "title", val)}
+                />
 
-                      <button onClick={() => moveItem(index, 1)}>↓</button>
-                    </div>
+                {/* DESCRIPTION */}
+                <Textarea3D
+                  label="Description"
+                  value={item.description}
+                  onChange={(val) => updateItem(item.id, "description", val)}
+                />
+
+                {/* ACTIONS */}
+                <div className="flex justify-between text-sm pt-2">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => moveItem(index, -1)}
+                      className="
+                        px-3 py-1 rounded-lg
+                        bg-background-light dark:bg-background-dark
+                        border border-border-light dark:border-border-dark
+                        text-text-primary-light dark:text-text-primary-dark
+                      "
+                    >
+                      ↑
+                    </button>
 
                     <button
-                      onClick={() => deleteItem(item.id)}
-                      className="text-red-500"
+                      onClick={() => moveItem(index, 1)}
+                      className="
+                        px-3 py-1 rounded-lg
+                        bg-background-light dark:bg-background-dark
+                        border border-border-light dark:border-border-dark
+                        text-text-primary-light dark:text-text-primary-dark
+                      "
                     >
-                      Delete
+                      ↓
                     </button>
                   </div>
+
+                  <button
+                    onClick={() => deleteItem(item.id)}
+                    className="text-error font-medium"
+                  >
+                    Delete
+                  </button>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* ================= RIGHT ================= */}
-        <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-          <h2 className="font-semibold">Mission & Story</h2>
+        {/* ================= RIGHT SIDE ================= */}
+        <div
+          className="
+            bg-surface-light dark:bg-surface-dark
+            border border-border-light dark:border-border-dark
+            shadow-soft rounded-2xl
+            p-6 space-y-4
+          "
+        >
+          <h2 className="font-semibold text-lg text-text-primary-light dark:text-text-primary-dark">
+            Mission & Story
+          </h2>
 
           <Input3D
             label="Mission Title"
@@ -236,20 +284,37 @@ export default function AboutSectionEditorPage() {
             onChange={(val) => updateField("quote", val)}
           />
 
-          {/* PREVIEW */}
-          <div className="border rounded-xl p-4 mt-4">
-            <h3 className="font-bold text-lg mb-2">{data.missionTitle}</h3>
+          {/* ================= PREVIEW ================= */}
+          <div
+            className="
+              border rounded-2xl p-5 mt-4
+              border-border-light dark:border-border-dark
+              bg-background-light dark:bg-background-dark
+            "
+          >
+            <h3 className="font-bold text-lg mb-2 text-text-primary-light dark:text-text-primary-dark">
+              {data.missionTitle}
+            </h3>
 
-            <p className="text-sm text-gray-600 mb-3">{data.missionText}</p>
+            <p className="text-sm mb-3 text-text-muted-light dark:text-text-muted-dark">
+              {data.missionText}
+            </p>
 
-            <p className="text-xs italic text-gray-500">“{data.quote}”</p>
+            <p className="text-xs italic text-brand-accent">“{data.quote}”</p>
           </div>
         </div>
       </div>
 
-      {/* SAVE */}
+      {/* ================= SAVE ================= */}
       <div className="flex justify-end">
-        <button className="px-6 py-2 bg-blue-900 text-white rounded-xl">
+        <button
+          className="
+            px-6 py-3 rounded-2xl
+            bg-brand-primary text-white
+            shadow-medium hover:opacity-90
+            transition
+          "
+        >
           Save About Section
         </button>
       </div>

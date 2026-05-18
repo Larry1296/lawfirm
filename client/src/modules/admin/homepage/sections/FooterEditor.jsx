@@ -70,12 +70,22 @@ export default function FooterEditorPage() {
     <div className="p-6 space-y-6">
       {/* HEADER */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">Footer Settings</h1>
+        <div>
+          <h1 className="text-2xl font-semibold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)]">
+            Footer Settings
+          </h1>
+
+          <p className="text-sm text-[color:var(--text-muted-light)] dark:text-[color:var(--text-muted-dark)]">
+            Customize footer branding and contact information
+          </p>
+        </div>
 
         <button
           onClick={() => updateField("enabled", !data.enabled)}
-          className={`px-4 py-2 rounded-lg ${
-            data.enabled ? "bg-green-100 text-green-700" : "bg-gray-200"
+          className={`px-4 py-2 rounded-lg font-medium transition ${
+            data.enabled
+              ? "bg-success/20 text-success"
+              : "bg-[color:var(--border-light)] dark:bg-[color:var(--border-dark)] text-[color:var(--text-muted-light)] dark:text-[color:var(--text-muted-dark)]"
           }`}
         >
           {data.enabled ? "Enabled" : "Disabled"}
@@ -84,8 +94,18 @@ export default function FooterEditorPage() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* ================= LEFT ================= */}
-        <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-          <h2 className="font-semibold">Branding</h2>
+        <div
+          className="
+            bg-[color:var(--surface-light)]
+            dark:bg-[color:var(--surface-dark)]
+            border border-[color:var(--border-light)]
+            dark:border-[color:var(--border-dark)]
+            rounded-2xl shadow-soft p-6 space-y-4
+          "
+        >
+          <h2 className="font-semibold text-lg text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)]">
+            Branding
+          </h2>
 
           <Input3D
             label="Brand Name"
@@ -99,7 +119,9 @@ export default function FooterEditorPage() {
             onChange={(val) => updateField("description", val)}
           />
 
-          <h2 className="font-semibold pt-4">Contact Info</h2>
+          <h2 className="font-semibold text-lg pt-4 text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)]">
+            Contact Info
+          </h2>
 
           <Input3D
             label="Location"
@@ -121,8 +143,18 @@ export default function FooterEditorPage() {
         </div>
 
         {/* ================= RIGHT ================= */}
-        <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-          <h2 className="font-semibold">Social Links</h2>
+        <div
+          className="
+            bg-[color:var(--surface-light)]
+            dark:bg-[color:var(--surface-dark)]
+            border border-[color:var(--border-light)]
+            dark:border-[color:var(--border-dark)]
+            rounded-2xl shadow-soft p-6 space-y-4
+          "
+        >
+          <h2 className="font-semibold text-lg text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)]">
+            Social Links
+          </h2>
 
           <Input3D
             label="Facebook URL"
@@ -142,7 +174,9 @@ export default function FooterEditorPage() {
             onChange={(val) => updateSocial("linkedin", val)}
           />
 
-          <h2 className="font-semibold pt-4">Footer Bottom</h2>
+          <h2 className="font-semibold text-lg pt-4 text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)]">
+            Footer Bottom
+          </h2>
 
           <Input3D
             label="Copyright Text"
@@ -151,23 +185,46 @@ export default function FooterEditorPage() {
           />
 
           {/* ================= PREVIEW ================= */}
-          <div className="mt-6 border rounded-xl p-4 text-sm">
-            <p className="font-bold">{data.brandName}</p>
+          <div
+            className="
+              mt-6 rounded-xl p-4 border
+              bg-[color:var(--background-light)]
+              dark:bg-[color:var(--background-dark)]
+              border-[color:var(--border-light)]
+              dark:border-[color:var(--border-dark)]
+            "
+          >
+            <p className="font-bold text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)]">
+              {data.brandName}
+            </p>
 
-            <p className="text-gray-600 mb-3">{data.description}</p>
+            <p className="text-sm text-[color:var(--text-muted-light)] dark:text-[color:var(--text-muted-dark)] mb-3">
+              {data.description}
+            </p>
 
-            <p>{data.contact.location}</p>
-            <p>{data.contact.phone}</p>
-            <p>{data.contact.email}</p>
+            <div className="space-y-1 text-sm text-[color:var(--text-primary-light)] dark:text-[color:var(--text-primary-dark)]">
+              <p>{data.contact.location}</p>
+              <p>{data.contact.phone}</p>
+              <p>{data.contact.email}</p>
+            </div>
 
-            <div className="mt-4 text-gray-500 text-xs">{data.copyright}</div>
+            <div className="mt-4 text-xs text-[color:var(--text-muted-light)] dark:text-[color:var(--text-muted-dark)]">
+              {data.copyright}
+            </div>
           </div>
         </div>
       </div>
 
       {/* SAVE */}
       <div className="flex justify-end">
-        <button className="px-6 py-2 bg-blue-900 text-white rounded-xl">
+        <button
+          className="
+            px-6 py-2 rounded-xl text-white font-medium
+            bg-[color:var(--brand-primary)]
+            hover:opacity-90
+            shadow-medium transition
+          "
+        >
           Save Footer
         </button>
       </div>

@@ -106,12 +106,15 @@ export default function ContactSectionEditorPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 animate-fadeIn">
       {/* ================= HEADER ================= */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold">Contact Section</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-text-primary-light dark:text-text-primary-dark">
+            Contact Section
+          </h1>
+
+          <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
             Manage contact page content & form
           </p>
         </div>
@@ -119,10 +122,10 @@ export default function ContactSectionEditorPage() {
         {/* ENABLE / DISABLE */}
         <button
           onClick={() => updateField("enabled", !data.enabled)}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold ${
+          className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
             data.enabled
-              ? "bg-green-100 text-green-700"
-              : "bg-gray-200 text-gray-600"
+              ? "bg-success/20 text-success"
+              : "bg-surface-light dark:bg-surface-dark text-text-muted-light dark:text-text-muted-dark"
           }`}
         >
           {data.enabled ? "Enabled" : "Disabled"}
@@ -132,8 +135,16 @@ export default function ContactSectionEditorPage() {
       {/* ================= GRID ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ================= LEFT: CONTACT INFO ================= */}
-        <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-          <h2 className="font-semibold text-lg">Contact Information</h2>
+        <div
+          className="
+            bg-surface-light dark:bg-surface-dark
+            border border-border-light dark:border-border-dark
+            shadow-soft rounded-2xl p-6 space-y-4
+          "
+        >
+          <h2 className="font-semibold text-lg text-text-primary-light dark:text-text-primary-dark">
+            Contact Information
+          </h2>
 
           <Input3D
             label="Section Title"
@@ -157,10 +168,13 @@ export default function ContactSectionEditorPage() {
           {/* PHONES */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <p className="font-medium">Phones</p>
+              <p className="font-medium text-text-primary-light dark:text-text-primary-dark">
+                Phones
+              </p>
+
               <button
                 onClick={() => addListItem("phones")}
-                className="text-blue-600 text-sm"
+                className="text-brand-primary text-sm font-medium"
               >
                 + Add
               </button>
@@ -175,7 +189,7 @@ export default function ContactSectionEditorPage() {
 
                 <button
                   onClick={() => removeListItem("phones", i)}
-                  className="text-red-500 text-sm"
+                  className="text-error text-sm font-medium"
                 >
                   X
                 </button>
@@ -186,10 +200,13 @@ export default function ContactSectionEditorPage() {
           {/* EMAILS */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <p className="font-medium">Emails</p>
+              <p className="font-medium text-text-primary-light dark:text-text-primary-dark">
+                Emails
+              </p>
+
               <button
                 onClick={() => addListItem("emails")}
-                className="text-blue-600 text-sm"
+                className="text-brand-primary text-sm font-medium"
               >
                 + Add
               </button>
@@ -204,7 +221,7 @@ export default function ContactSectionEditorPage() {
 
                 <button
                   onClick={() => removeListItem("emails", i)}
-                  className="text-red-500 text-sm"
+                  className="text-error text-sm font-medium"
                 >
                   X
                 </button>
@@ -221,8 +238,16 @@ export default function ContactSectionEditorPage() {
         </div>
 
         {/* ================= RIGHT: FORM SETTINGS ================= */}
-        <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-          <h2 className="font-semibold text-lg">Contact Form</h2>
+        <div
+          className="
+            bg-surface-light dark:bg-surface-dark
+            border border-border-light dark:border-border-dark
+            shadow-soft rounded-2xl p-6 space-y-4
+          "
+        >
+          <h2 className="font-semibold text-lg text-text-primary-light dark:text-text-primary-dark">
+            Contact Form
+          </h2>
 
           <Input3D
             label="Form Title"
@@ -237,15 +262,37 @@ export default function ContactSectionEditorPage() {
           />
 
           {/* ================= PREVIEW ================= */}
-          <div className="mt-6 p-4 border rounded-xl space-y-2">
-            <h3 className="font-bold text-lg">{data.form.title}</h3>
+          <div
+            className="
+              mt-6 p-4 rounded-xl border
+              border-border-light dark:border-border-dark
+              bg-background-light dark:bg-background-dark
+              space-y-3
+            "
+          >
+            <h3 className="font-bold text-lg text-text-primary-light dark:text-text-primary-dark">
+              {data.form.title}
+            </h3>
 
             <input
-              className="w-full border p-2 rounded"
+              className="
+                w-full rounded-xl border p-3 outline-none
+                bg-surface-light dark:bg-surface-dark
+                border-border-light dark:border-border-dark
+                text-text-primary-light dark:text-text-primary-dark
+                placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark
+              "
               placeholder="Full Name"
             />
 
-            <button className="w-full bg-blue-900 text-white py-2 rounded">
+            <button
+              className="
+                w-full py-3 rounded-xl
+                bg-brand-primary text-white
+                hover:opacity-90 transition
+                shadow-soft
+              "
+            >
               {data.form.buttonText}
             </button>
           </div>
@@ -254,7 +301,14 @@ export default function ContactSectionEditorPage() {
 
       {/* ================= SAVE ================= */}
       <div className="flex justify-end">
-        <button className="px-6 py-2 bg-blue-900 text-white rounded-xl">
+        <button
+          className="
+            px-6 py-3 rounded-2xl
+            bg-brand-primary text-white
+            shadow-medium hover:opacity-90
+            transition
+          "
+        >
           Save Contact Section
         </button>
       </div>

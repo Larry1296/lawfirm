@@ -52,6 +52,11 @@ export default function Button3D({
       theme === "dark"
         ? "bg-purple-800 text-white hover:bg-purple-900"
         : "bg-purple-700 text-white hover:bg-purple-800";
+  else if (variant === "warning")
+    variantClass =
+      theme === "dark"
+        ? "bg-yellow-500 text-black hover:bg-yellow-600"
+        : "bg-yellow-600 text-black hover:bg-yellow-700";
 
   return (
     <button
