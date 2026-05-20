@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Card from "../../../../components/ui/Card";
+import Card from "../../../../../components/ui/Card";
 import { FileText, AlertCircle } from "lucide-react";
 
 export default function PendingDocumentsWidget({ count = 0, items = [] }) {

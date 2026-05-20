@@ -1,4 +1,4 @@
-import StatCard from "../../../../components/dashboard/StatCard";
+import StatCard from "../../../../../components/dashboard/StatCard";
 
 /* =========================
    DEFAULT ICON FALLBACK
