@@ -1,21 +1,35 @@
-import { Navigate } from "react-router-dom";
-import { useAuthStore } from "../../src1/stores/authStore";
+// // src/routes/ProtectedRoute.jsx
 
-export default function ProtectedRoute({ allowedRoles, children }) {
-  const { user, loading } = useAuthStore();
+// import React from "react";
+// import { Navigate } from "react-router-dom";
+// import useAuth from "../core/hooks/useAuth";
 
-  if (loading) {
-    return <div className="text-center mt-10">Loading...</div>;
-  }
+// const ProtectedRoute = ({ children }) => {
+//   const { user, loading } = useAuth();
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+//   // Optional loading state
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen flex items-center justify-center">
+//         Loading...
+//       </div>
+//     );
+//   }
 
-  // ✅ USE user.role (OPTION A)
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
-  }
+//   // Not authenticated
+//   if (!user) {
+//     return <Navigate to="/login" replace />;
+//   }
 
+//   return children;
+// };
+
+// export default ProtectedRoute;
+
+// src/routes/ProtectedRoute.jsx
+
+const ProtectedRoute = ({ children }) => {
   return children;
-}
+};
+
+export default ProtectedRoute;

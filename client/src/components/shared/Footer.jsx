@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-10">
         {/* LOGO / ABOUT */}
         <div>
-          <Brand size="h-16 w-16" textSize="text-2xl" />
+          <Brand size="h-16 w-16" textSize="text-2xl" textColor="text-white" />
           <p className="mt-4 text-sm text-white/80">
             Professional legal services you can trust. We provide reliable and
             efficient legal solutions tailored to your needs.

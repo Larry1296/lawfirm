@@ -1,10 +1,10 @@
 import React from "react";
 import LawyerLayout from "./LawyerLayout";
-import ThemeProvider from "../../core/store/ThemeProvider";
+import ThemeProvider from "../../../core/store/ThemeProvider";
 
 export default function LawyerLayoutWrapper() {
   return (
-    <ThemeProvider role="LAWYER">
+    <ThemeProvider role="lawyer">
       <LawyerLayout />
     </ThemeProvider>
   );

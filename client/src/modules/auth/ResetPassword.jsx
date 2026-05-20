@@ -4,10 +4,10 @@ import { LockKeyhole, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import Card from "../../../components/ui/Card";
-import Button3D from "../../../components/ui/Button3D";
-import PasswordInput from "../../../components/ui/PasswordInput";
-import FloatingInput from "../../../components/ui/FloatingInput";
+import Card from "../../components/ui/Card";
+import Button3D from "../../components//ui/Button3D";
+import PasswordInput from "../../components/ui/PasswordInput";
+import FloatingInput from "../../components/ui/FloatingInput";
 
 export default function ResetPassword() {
   const navigate = useNavigate();

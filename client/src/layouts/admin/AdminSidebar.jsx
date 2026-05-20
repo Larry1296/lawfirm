@@ -17,6 +17,7 @@ import LogoutButton from "../../components/ui/LogoutButton";
 import SidebarNavLink from "../../components/ui/SidebarNavLink";
 import { useContext } from "react";
 import ThemeContext from "../../core/store/ThemeContext";
+import Brand from "../../components/ui/Brand";
 
 const links = [
   {
@@ -50,7 +51,7 @@ const links = [
   { name: "Settings", path: "/admin/settings", icon: <Settings size={18} /> },
 ];
 
-export default function AdminSidebar({ onClose }) {
+export default function ClientSidebar({ onClose }) {
   const { theme } = useContext(ThemeContext);
 
   const bgSidebar =
@@ -61,14 +62,14 @@ export default function AdminSidebar({ onClose }) {
   return (
     <aside className={`w-64 h-full ${bgSidebar} flex flex-col shadow-2xl`}>
       {/* HEADER */}
-      <div className="p-5 border-b border-white/10 flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold">LawFirm</h1>
-          <p className="text-xs text-white/60">Admin Panel</p>
+      <div className="relative py-3 px-5 border-b border-white/10">
+        <div className="flex items-center justify-center">
+          <Brand size="h-16 w-16" showText={false} />
         </div>
+
         <button
           onClick={() => window.innerWidth < 1024 && onClose?.()}
-          className="lg:hidden p-2 rounded hover:bg-white/10"
+          className="lg:hidden absolute top-3 right-4 p-2 rounded hover:bg-white/10"
         >
           <X size={20} />
         </button>

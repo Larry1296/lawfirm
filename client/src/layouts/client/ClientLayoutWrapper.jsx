@@ -4,7 +4,7 @@ import ThemeProvider from "../../core/store/ThemeProvider";
 
 export default function ClientLayoutWrapper() {
   return (
-    <ThemeProvider role="CLIENT">
+    <ThemeProvider role="client">
       <ClientLayout />
     </ThemeProvider>
   );

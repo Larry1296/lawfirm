@@ -1,91 +1,113 @@
-import { NavLink } from "react-router-dom";
 import {
+  X,
   LayoutDashboard,
   Briefcase,
-  MessageSquare,
+  Users,
   Calendar,
-  UserPlus,
-  LogOut,
+  FileText,
+  HomeIcon,
+  CreditCard,
+  BarChart,
+  MessageSquare,
+  ShieldCheck,
+  Settings,
+  UserCog,
 } from "lucide-react";
+import LogoutButton from "../../../components/ui//LogoutButton";
+import SidebarNavLink from "../../../components/ui/SidebarNavLink";
+import { useContext } from "react";
+import ThemeContext from "../../../core/store/ThemeContext";
+import Brand from "../../../components/ui/Brand";
 
 const links = [
   {
-    name: "Dashboard",
-    path: "/assistant/dashboard",
+    name: "Overview",
+    path: "/secretary/dashboard",
     icon: <LayoutDashboard size={18} />,
     end: true,
   },
   {
-    name: "Assigned Cases",
-    path: "/assistant/cases",
-    icon: <Briefcase size={18} />,
-    end: true,
+    name: "Home Page",
+    path: "/secretary/homepagecustomization",
+    icon: <HomeIcon size={18} />,
   },
+  { name: "Cases", path: "/secretary/cases", icon: <Briefcase size={18} /> },
+  { name: "Clients", path: "/secretary/clients", icon: <Users size={18} /> },
+  { name: "Staff", path: "/secretary/staff", icon: <UserCog size={18} /> },
   {
-    name: "Client Chats",
-    path: "/assistant/chat",
-    icon: <MessageSquare size={18} />,
-  },
-  {
-    name: "Scheduling",
-    path: "/assistant/scheduling",
+    name: "Calendar",
+    path: "/secretary/calendar",
     icon: <Calendar size={18} />,
   },
   {
-    name: "Onboarding",
-    path: "/assistant/onboarding",
-    icon: <UserPlus size={18} />,
+    name: "Documents",
+    path: "/secretary/documents",
+    icon: <FileText size={18} />,
+  },
+  {
+    name: "Billing",
+    path: "/secretary/billing",
+    icon: <CreditCard size={18} />,
+  },
+  { name: "Reports", path: "/secretary/reports", icon: <BarChart size={18} /> },
+  {
+    name: "Communication",
+    path: "/secretary/communication",
+    icon: <MessageSquare size={18} />,
+  },
+  {
+    name: "Compliance",
+    path: "/secretary/compliance",
+    icon: <ShieldCheck size={18} />,
+  },
+  {
+    name: "Settings",
+    path: "/secretary/settings",
+    icon: <Settings size={18} />,
   },
 ];
 
-export default function AssistantSidebar() {
-  return (
-    <aside className="w-64 min-w-[16rem] bg-blue-900 text-white flex flex-col h-screen">
-      {/* LOGO */}
-      <div className="p-5 border-b border-green-700">
-        <h1 className="text-xl font-bold tracking-wide">LawFirm</h1>
-        <p className="text-xs text-green-300">Assistant Panel</p>
-      </div>
+export default function SecretarySidebar({ onClose }) {
+  const { theme } = useContext(ThemeContext);
 
-      {/* NAVIGATION */}
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+  const bgSidebar =
+    theme === "dark"
+      ? "bg-[color:var(--surface-dark)] text-white"
+      : "bg-[color:var(--brand-primary)] text-white";
+
+  return (
+    <aside className={`w-64 h-full ${bgSidebar} flex flex-col shadow-2xl`}>
+      {/* HEADER */}
+      <div className="relative py-3 px-5 border-b border-white/10">
+        <div className="flex items-center justify-center">
+          <Brand size="h-16 w-16" showText={false} />
+        </div>
+
+        <button
+          onClick={() => window.innerWidth < 1024 && onClose?.()}
+          className="lg:hidden absolute top-3 right-4 p-2 rounded hover:bg-white/10"
+        >
+          <X size={20} />
+        </button>
+      </div>
+      {/* NAV */}
+      <nav className="flex-1 p-3 space-y-2 overflow-y-auto">
         {links.map((link) => (
-          <NavLink
+          <SidebarNavLink
             key={link.name}
             to={link.path}
-            end={link.end || false}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-2 rounded-md transition-all duration-200 ${
-                isActive
-                  ? "bg-green-400 text-black font-semibold"
-                  : "hover:bg-green-700 text-white"
-              }`
-            }
+            end={link.end}
+            icon={link.icon}
+            onClick={onClose}
           >
-            {link.icon}
-            <span className="text-sm">{link.name}</span>
-          </NavLink>
+            {link.name}
+          </SidebarNavLink>
         ))}
       </nav>
 
-      {/* FOOTER / USER */}
-      <div className="p-4 border-t border-green-700 space-y-3">
-        {/* USER INFO */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-green-400 flex items-center justify-center text-black font-bold">
-            A
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Assistant</p>
-            <p className="text-xs text-green-300">Active</p>
-          </div>
-        </div>
-
-        {/* LOGOUT */}
-        <button className="w-full flex items-center justify-center gap-2 bg-green-400 hover:bg-green-300 text-black py-2 rounded-md font-medium transition">
-          <LogOut size={16} />
-          Logout
-        </button>
+      {/* FOOTER */}
+      <div className="p-4 mt-auto">
+        <LogoutButton variant="warning" />
       </div>
     </aside>
   );
