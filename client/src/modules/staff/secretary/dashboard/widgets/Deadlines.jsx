@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import InfoListCard from "../../../../components/dashboard/InfoList";
+import InfoListCard from "../../../../../components/dashboard/InfoList";
 import { AlertTriangle } from "lucide-react";
 
 export default function DeadlinesWidget({ deadlines = [] }) {

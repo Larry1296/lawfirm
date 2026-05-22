@@ -1,46 +1,37 @@
-import authApi from "./authApi";
-import API from "./apiClient";
+import apiClient from "../core/api/axios";
 
-// =========================
 // AUTH
-// =========================
-export const login = (data) => authApi.post("/auth/login/", data);
+export const login = (data) => apiClient.post("/auth/login/", data);
 
-export const register = (data) => authApi.post("/auth/register/", data);
+export const register = (data) => apiClient.post("/auth/register/", data);
 
-export const getMe = () => authApi.get("/auth/me/");
+export const getMe = () => apiClient.get("/auth/me/");
 
-// =========================
 // STAFF
-// =========================
-export const createStaff = (data) => API.post("/auth/create-staff/", data);
+export const getStaff = () => apiClient.get("/auth/staff/");
 
-export const getStaff = () => API.get("/auth/staff/");
+export const createStaff = (data) =>
+  apiClient.post("/auth/create-staff/", data);
 
 export const updateStaffPermissions = (id, data) =>
-  API.patch(`/auth/staff/${id}/permissions/`, data);
+  apiClient.patch(`/auth/staff/${id}/permissions/`, data);
 
-export const deleteUser = (id) => API.delete(`/auth/staff/${id}/delete/`);
+export const deleteUser = (id) => apiClient.delete(`/auth/staff/${id}/delete/`);
 
-// =========================
 // CLIENTS
-// =========================
-export const createClient = (data) => API.post("/auth/create-client/", data);
+export const getClients = () => apiClient.get("/auth/clients/");
 
-export const getClients = () => API.get("/auth/clients/");
+export const createClient = (data) =>
+  apiClient.post("/auth/create-client/", data);
 
-// =========================
-// CLIENT CONVERSION (🔥 NEW FEATURE YOU BUILT)
-// =========================
-export const convertClientToMember = (userId) =>
-  API.post(`/auth/clients/${userId}/convert/`);
+export const convertClientToMember = (id) =>
+  apiClient.post(`/auth/clients/${id}/convert/`);
 
-export const addClientToFirm = (userId) =>
-  API.post(`/auth/clients/${userId}/add-to-firm/`);
+export const addClientToFirm = (id) =>
+  apiClient.post(`/auth/clients/${id}/add-to-firm/`);
 
-// =========================
-// USER GENERAL
-// =========================
-export const getUser = (id) => API.get(`/auth/users/${id}/`);
+export const deleteClient = (id) =>
+  apiClient.delete(`/auth/clients/${id}/delete/`);
 
-export const deleteClient = (id) => API.delete(`/auth/clients/${id}/delete/`);
+// USER
+export const getUser = (id) => apiClient.get(`/auth/users/${id}/`);

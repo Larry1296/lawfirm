@@ -1,57 +1,88 @@
 import {
   X,
   LayoutDashboard,
+  HomeIcon,
   Briefcase,
   Users,
+  UserCog,
   Calendar,
   FileText,
-  HomeIcon,
   CreditCard,
   BarChart,
   MessageSquare,
   ShieldCheck,
   Settings,
-  UserCog,
+  FolderKanban,
+  Activity,
+  Bell,
 } from "lucide-react";
-import LogoutButton from "../../components/ui/LogoutButton";
-import SidebarNavLink from "../../components/ui/SidebarNavLink";
+
 import { useContext } from "react";
 import ThemeContext from "../../core/store/ThemeContext";
+import LogoutButton from "../../components/ui/LogoutButton";
+import SidebarNavLink from "../../components/ui/SidebarNavLink";
 import Brand from "../../components/ui/Brand";
 
+/* ================= ADMIN NAVIGATION ================= */
 const links = [
+  // CORE
   {
-    name: "Overview",
+    name: "Dashboard",
     path: "/admin/dashboard",
     icon: <LayoutDashboard size={18} />,
     end: true,
   },
-  {
-    name: "Home Page",
-    path: "/admin/homepagecustomization",
-    icon: <HomeIcon size={18} />,
-  },
+
+  // BUSINESS
   { name: "Cases", path: "/admin/cases", icon: <Briefcase size={18} /> },
   { name: "Clients", path: "/admin/clients", icon: <Users size={18} /> },
   { name: "Staff", path: "/admin/staff", icon: <UserCog size={18} /> },
   { name: "Calendar", path: "/admin/calendar", icon: <Calendar size={18} /> },
+
+  // DOCUMENTS & WORK
   { name: "Documents", path: "/admin/documents", icon: <FileText size={18} /> },
+  { name: "Tasks", path: "/admin/tasks", icon: <FolderKanban size={18} /> },
+
+  // FINANCE
   { name: "Billing", path: "/admin/billing", icon: <CreditCard size={18} /> },
   { name: "Reports", path: "/admin/reports", icon: <BarChart size={18} /> },
+
+  // COMMUNICATION
   {
     name: "Communication",
     path: "/admin/communication",
     icon: <MessageSquare size={18} />,
   },
+
+  // COMPLIANCE & SYSTEM
   {
     name: "Compliance",
     path: "/admin/compliance",
     icon: <ShieldCheck size={18} />,
   },
+  {
+    name: "Notifications",
+    path: "/admin/notifications",
+    icon: <Bell size={18} />,
+  },
+  {
+    name: "Activity Logs",
+    path: "/admin/activity",
+    icon: <Activity size={18} />,
+  },
+
+  // SETTINGS
   { name: "Settings", path: "/admin/settings", icon: <Settings size={18} /> },
+
+  // OPTIONAL (HOME PAGE BUILDER)
+  {
+    name: "Homepage Builder",
+    path: "/admin/homepagecustomization",
+    icon: <HomeIcon size={18} />,
+  },
 ];
 
-export default function ClientSidebar({ onClose }) {
+export default function AdminSidebar({ onClose }) {
   const { theme } = useContext(ThemeContext);
 
   const bgSidebar =
@@ -62,9 +93,9 @@ export default function ClientSidebar({ onClose }) {
   return (
     <aside className={`w-64 h-full ${bgSidebar} flex flex-col shadow-2xl`}>
       {/* HEADER */}
-      <div className="relative py-3 px-5 border-b border-white/10">
+      <div className="relative py-4 px-5 border-b border-white/10">
         <div className="flex items-center justify-center">
-          <Brand size="h-16 w-16" showText={false} />
+          <Brand size="h-14 w-14" showText />
         </div>
 
         <button
@@ -91,7 +122,7 @@ export default function ClientSidebar({ onClose }) {
       </nav>
 
       {/* FOOTER */}
-      <div className="p-4 mt-auto">
+      <div className="p-4 mt-auto border-t border-white/10">
         <LogoutButton variant="warning" />
       </div>
     </aside>

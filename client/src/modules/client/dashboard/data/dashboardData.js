@@ -1,51 +1,71 @@
-import { Briefcase, BarChart3, Users } from "lucide-react";
+// Mock structure (later replaced by API: getClientDashboard)
 
-export const stats = [
-  {
-    title: "Active Cases",
-    value: 128,
-    icon: Briefcase,
-    color: "blue",
+export const clientDashboardMock = {
+  case: {
+    id: "CASE-001",
+    title: "Civil Case - Contract Dispute",
+    status: "ACTIVE",
+    stage: "Discovery",
+    next_hearing: "2026-06-02",
+    lawyer: "Adv. Maina",
+    court: "Milimani Law Courts",
   },
-  {
-    title: "Revenue",
-    value: "KSh 1.24M",
-    icon: BarChart3,
-    color: "green",
+
+  events: [
+    {
+      id: 1,
+      title: "Court Hearing",
+      date: "2026-06-02",
+      type: "hearing",
+    },
+    {
+      id: 2,
+      title: "Document Submission Deadline",
+      date: "2026-05-28",
+      type: "deadline",
+    },
+  ],
+
+  alerts: [
+    {
+      id: 1,
+      type: "warning",
+      message: "You must submit affidavit before 28 May",
+    },
+    {
+      id: 2,
+      type: "info",
+      message: "New message from your lawyer",
+    },
+  ],
+
+  aiSuggestions: [
+    {
+      id: 1,
+      title: "Prepare for cross-examination",
+      description:
+        "Review all contract communications and timeline inconsistencies.",
+    },
+    {
+      id: 2,
+      title: "Upload missing documents",
+      description: "Bank statements from Jan–March are required for your case.",
+    },
+  ],
+
+  chatPreview: {
+    case_id: "CASE-001",
+    last_messages: [
+      {
+        sender: "LAWYER",
+        message: "Please confirm if you received summons.",
+        time: "10:30",
+      },
+      {
+        sender: "CLIENT",
+        message: "Yes I received it yesterday.",
+        time: "10:45",
+      },
+    ],
   },
-  {
-    title: "New Clients",
-    value: 24,
-    icon: Users,
-    color: "purple",
-  },
-  {
-    title: "Overdue Invoices",
-    value: 7,
-    icon: BarChart3,
-    color: "red",
-  },
-];
-
-export const urgentDeadlines = [
-  { title: "Case #1023 Filing Deadline", date: "May 2" },
-  { title: "Mwangi vs State Submission", date: "May 4" },
-];
-
-export const upcomingHearings = [
-  { case: "Amina Hassan vs ABC Ltd", date: "May 3" },
-  { case: "John Doe vs County Gov", date: "May 6" },
-];
-
-export const notifications = [
-  "New case assigned",
-  "Invoice overdue",
-  "Client uploaded document",
-  "Court hearing rescheduled",
-];
-
-export const staffPerformance = [
-  { name: "Adv. Kamau", value: 80 },
-  { name: "Adv. Wanjiku", value: 65 },
-  { name: "Assistant Brian", value: 90 },
-];
+};

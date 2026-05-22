@@ -108,8 +108,8 @@ export default function CaseDistributionWidget() {
       {/* CONTENT */}
       <div className="relative z-10 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         {/* CHART */}
-        <div className="h-[320px]">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-[320px] min-w-0">
+          <ResponsiveContainer width="100%" height={320}>
             <PieChart>
               <Pie
                 data={data}

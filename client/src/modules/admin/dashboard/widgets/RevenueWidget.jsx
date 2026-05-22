@@ -147,8 +147,8 @@ export default function RevenueWidget() {
       </div>
 
       {/* CHART */}
-      <div className="relative z-10 mt-8 h-[320px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="relative z-10 mt-8 h-[320px] min-w-0">
+        <ResponsiveContainer width="100%" height={320}>
           <AreaChart data={revenueData}>
             <defs>
               <linearGradient id="revenue" x1="0" y1="0" x2="0" y2="1">

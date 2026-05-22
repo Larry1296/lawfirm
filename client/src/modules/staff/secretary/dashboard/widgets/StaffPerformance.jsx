@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import ProgressList from "../../../../components/dashboard/ProgressList";
+import ProgressList from "../../../../../components/dashboard/ProgressList";
 import { TrendingUp } from "lucide-react";
 
 export default function StaffPerformanceWidget({ data = [] }) {

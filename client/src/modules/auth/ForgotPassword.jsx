@@ -18,9 +18,9 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="flex-1 flex flex-col lg:flex-row">
       {/* LEFT SECTION */}
-      <div className="lg:w-1/2 bg-blue-700 relative overflow-hidden flex items-center justify-center p-10">
+      <div className="hidden lg:flex lg:w-1/2 bg-blue-700 relative overflow-hidden items-center justify-center p-10">
         <motion.div
           animate={{ scale: [1, 1.2, 1], x: [0, 40, 0], y: [0, -30, 0] }}
           transition={{ duration: 8, repeat: Infinity }}
@@ -55,7 +55,7 @@ export default function ForgotPassword() {
       </div>
 
       {/* RIGHT SECTION */}
-      <div className="lg:w-1/2 flex items-start justify-center pt-36 md:pt-40 lg:pt-44 p-8 bg-orange-50">
+      <div className="w-full lg:w-1/2 flex items-center justify-center py-10 px-6 lg:p-8 bg-orange-50">
         <Card className="w-full max-w-md p-8">
           <Link
             to="/login"

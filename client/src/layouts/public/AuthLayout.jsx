@@ -7,7 +7,7 @@ export default function AuthLayout() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-900">
       <PublicNavbar variant="auth" />
 
-      <main className="flex-1">
+      <main className="flex-1 flex">
         <Outlet />
       </main>
 

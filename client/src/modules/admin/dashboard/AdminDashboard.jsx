@@ -2,13 +2,21 @@ import SectionHeading from "../../../components/ui/SectionHeading";
 
 /* ================= WIDGETS ================= */
 import StatsWidget from "./widgets/Stats";
-import DeadlinesWidget from "./widgets/Deadlines";
-import HearingsWidget from "./widgets/Hearings";
-import NotificationsWidget from "./widgets/Notifications";
+import DeadlinesWidget from "./widgets/DeadlinesWidget";
+import UpcomingHearingsWidget from "./widgets/UpcomingHearingsWidget";
+import AlertsNotificationsWidget from "./widgets/AlertsNotificationsWidget";
 import StaffPerformanceWidget from "./widgets/StaffPerformance";
-import PendingDocumentsWidget from "./widgets/PendingDocuments";
 
-/* ================= MOCK DATA (TEMP ONLY) ================= */
+import RevenueWidget from "./widgets/RevenueWidget";
+import TeamPerformanceWidget from "./widgets/TeamPerformanceWidget";
+import KPIOverviewWidget from "./widgets/KPIOverviewWidget";
+import FinancialOverviewWidget from "./widgets/FinancialOverviewWidget";
+import RecentActivityWidget from "./widgets/RecentActivityWidget";
+import AIInsightsWidget from "./widgets/AIInsightsWidget";
+import CaseDistributionWidget from "./widgets/CaseDistributionWidget";
+import RecentCasesWidget from "./widgets/RecentCasesWidget";
+
+/* ================= MOCK DATA ================= */
 import {
   stats,
   urgentDeadlines,
@@ -29,26 +37,47 @@ export default function AdminDashboard() {
       {/* ================= TOP STATS ================= */}
       <StatsWidget stats={stats} />
 
-      {/* ================= MAIN GRID (CONTROL PANEL) ================= */}
+      {/* ================= KPI OVERVIEW ================= */}
+      <KPIOverviewWidget />
+
+      {/* ================= MAIN ANALYTICS ================= */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2">
+          <RevenueWidget />
+        </div>
+
+        <FinancialOverviewWidget />
+      </div>
+
+      {/* ================= OPERATIONS ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* DEADLINES */}
         <DeadlinesWidget deadlines={urgentDeadlines} />
 
-        {/* HEARINGS */}
-        <HearingsWidget hearings={upcomingHearings} />
-        {/* PENDING DOCUMENTS */}
-        <PendingDocumentsWidget />
+        <UpcomingHearingsWidget hearings={upcomingHearings} />
+
+        <AlertsNotificationsWidget notifications={notifications} />
       </div>
 
-      {/* ================= PERFORMANCE + DOCS ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* NOTIFICATIONS */}
-        <NotificationsWidget notifications={notifications} />
-        {/* STAFF PERFORMANCE (BIG SECTION) */}
-        <div className="lg:col-span-2">
-          <StaffPerformanceWidget data={staffPerformance} />
+      {/* ================= TEAM PERFORMANCE ================= */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2">
+          <TeamPerformanceWidget />
         </div>
+
+        <StaffPerformanceWidget data={staffPerformance} />
       </div>
+
+      {/* ================= CASES & ACTIVITY ================= */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <RecentCasesWidget />
+
+        <RecentActivityWidget />
+
+        <CaseDistributionWidget />
+      </div>
+
+      {/* ================= AI INSIGHTS ================= */}
+      <AIInsightsWidget />
     </div>
   );
 }

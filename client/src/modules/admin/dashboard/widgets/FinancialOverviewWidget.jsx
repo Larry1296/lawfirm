@@ -214,7 +214,7 @@ export default function FinancialOverviewWidget() {
 
       {/* CHART */}
       <div className="relative z-10 mt-10 h-[340px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={320}>
           <BarChart data={financeData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1F2A44" />
 

@@ -160,6 +160,8 @@ class LawFirmMemberSerializer(serializers.ModelSerializer):
 
     full_name = serializers.SerializerMethodField()
 
+    case_number = serializers.CharField( read_only=True )
+
     permissions = serializers.SerializerMethodField()
 
     class Meta:
@@ -171,6 +173,7 @@ class LawFirmMemberSerializer(serializers.ModelSerializer):
             'email',
             'full_name',
             'role',
+            'case_number',
             'permissions',
             'is_active',
             'created_at',
@@ -297,11 +300,33 @@ class UpdateStaffPermissionsSerializer(serializers.Serializer):
 # =========================
 class CreateClientSerializer(serializers.ModelSerializer):
 
-    password = serializers.CharField(write_only=True, min_length=6)
+    password = serializers.CharField(
+        write_only=True,
+        min_length=6
+    )
 
-    full_name = serializers.CharField(write_only=True)
-    national_id = serializers.CharField(write_only=True, required=False, allow_blank=True)
-    phone_number = serializers.CharField(write_only=True)
+    full_name = serializers.CharField(
+        write_only=True
+    )
+
+    national_id = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True
+    )
+
+    phone_number = serializers.CharField(
+        write_only=True
+    )
+
+    # =====================================================
+    # OPTIONAL CASE NUMBER
+    # =====================================================
+    case_number = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True
+    )
 
     class Meta:
         model = User
@@ -312,45 +337,79 @@ class CreateClientSerializer(serializers.ModelSerializer):
             'full_name',
             'national_id',
             'phone_number',
+            'case_number',
         ]
 
+    # =====================================================
+    # VALIDATION
+    # =====================================================
     def validate(self, data):
 
         request = self.context['request']
 
-        if not request.user.firm:
-            raise serializers.ValidationError("User must belong to a firm")
+        # ADMIN ALWAYS ALLOWED
+        if request.user.role == 'ADMIN':
+            return data
 
         membership = request.user.get_membership()
 
-        if request.user.role != 'ADMIN':
+        if not membership:
+            raise serializers.ValidationError(
+                "No active membership found"
+            )
 
-            if not membership:
-                raise serializers.ValidationError("No active membership found")
-
-            if not membership.has_permission('create_clients'):
-                raise serializers.ValidationError(
-                    "No permission to create clients"
-                )
+        if not membership.has_permission(
+            'create_clients'
+        ):
+            raise serializers.ValidationError(
+                "No permission to create clients"
+            )
 
         return data
 
+    # =====================================================
+    # CREATE CLIENT
+    # =====================================================
     def create(self, validated_data):
 
         request = self.context['request']
+
         firm = request.user.firm
 
-        full_name = validated_data.pop('full_name')
-        national_id = validated_data.pop('national_id', None)
-        phone_number = validated_data.pop('phone_number')
-        password = validated_data.pop('password')
+        case_number = validated_data.pop(
+            'case_number',
+            ''
+        )
 
+        full_name = validated_data.pop(
+            'full_name'
+        )
+
+        national_id = validated_data.pop(
+            'national_id',
+            None
+        )
+
+        phone_number = validated_data.pop(
+            'phone_number'
+        )
+
+        password = validated_data.pop(
+            'password'
+        )
+
+        # =================================================
+        # CREATE USER
+        # =================================================
         user = User.objects.create_user(
             email=validated_data['email'],
             password=password,
             role='CLIENT'
         )
 
+        # =================================================
+        # CREATE PROFILE
+        # =================================================
         Profile.objects.create(
             user=user,
             full_name=full_name,
@@ -358,11 +417,18 @@ class CreateClientSerializer(serializers.ModelSerializer):
             phone_number=phone_number,
         )
 
-        LawFirmMember.objects.create(
-            user=user,
-            firm=firm,
-            role='CLIENT',
-            created_by=request.user,
-        )
+        # =================================================
+        # CREATE MEMBERSHIP ONLY IF
+        # CASE NUMBER EXISTS
+        # =================================================
+        if case_number and case_number.strip():
+
+            LawFirmMember.objects.create(
+                user=user,
+                firm=firm,
+                role='CLIENT',
+                case_number=case_number,
+                created_by=request.user,
+            )
 
         return user

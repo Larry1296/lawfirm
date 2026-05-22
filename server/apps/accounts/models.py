@@ -337,6 +337,15 @@ class LawFirmMember(models.Model):
         choices=ROLE_IN_FIRM
     )
 
+    # =========================================================
+    # OPTIONAL CLIENT CASE LINK
+    # =========================================================
+    case_number = models.CharField(
+        max_length=120,
+        null=True,
+        blank=True
+    )
+
     permissions = models.ManyToManyField(
         FirmPermission,
         blank=True,
@@ -382,10 +391,12 @@ class LawFirmMember(models.Model):
     def clean(self):
 
         # CLIENT membership validation
-        if self.role == 'CLIENT' and self.user.role != 'CLIENT':
-            raise ValidationError(
-                "Only CLIENT users can have CLIENT membership"
-            )
+        if self.role == 'CLIENT':
+
+            if self.user.role != 'CLIENT':
+                raise ValidationError(
+                    "Only CLIENT users can have CLIENT membership"
+                )
 
         # STAFF membership validation
         if self.role in ['LAWYER', 'SECRETARY']:
@@ -396,10 +407,12 @@ class LawFirmMember(models.Model):
                 )
 
         # ADMIN must always be LAWYER
-        if self.user.role == 'ADMIN' and self.role != 'LAWYER':
-            raise ValidationError(
-                "ADMIN users must have LAWYER role inside firm"
-            )
+        if self.user.role == 'ADMIN':
+
+            if self.role != 'LAWYER':
+                raise ValidationError(
+                    "ADMIN users must have LAWYER role inside firm"
+                )
 
     # =========================================================
     # PERMISSION HELPERS
@@ -410,6 +423,9 @@ class LawFirmMember(models.Model):
             code=code
         ).exists()
 
+    # =========================================================
+    # DEACTIVATE MEMBERSHIP
+    # =========================================================
     def deactivate(self):
 
         self.is_active = False
@@ -427,11 +443,14 @@ class LawFirmMember(models.Model):
 
         super().save(*args, **kwargs)
 
-        # Assign default permissions
+        # =====================================================
+        # ASSIGN DEFAULT PERMISSIONS
+        # =====================================================
         if is_new:
 
             codes = []
 
+            # LAWYER DEFAULTS
             if self.role == 'LAWYER':
 
                 codes = [
@@ -442,12 +461,18 @@ class LawFirmMember(models.Model):
                     'manage_documents',
                 ]
 
+            # SECRETARY DEFAULTS
             elif self.role == 'SECRETARY':
 
                 codes = [
                     'schedule_events',
                     'manage_documents',
                 ]
+
+            # CLIENTS GET NO PERMISSIONS
+            elif self.role == 'CLIENT':
+
+                codes = []
 
             if codes:
 
@@ -456,7 +481,6 @@ class LawFirmMember(models.Model):
                 )
 
                 self.permissions.set(permissions)
-
 
 # =========================================================
 # AUDIT LOGS

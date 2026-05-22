@@ -1,52 +1,138 @@
-import SectionHeading from "../../../components/ui/SectionHeading";
-
-/* ================= WIDGETS ================= */
-import StatsWidget from "./widgets/Stats";
-import DeadlinesWidget from "./widgets/Deadlines";
-import HearingsWidget from "./widgets/Hearings";
-import NotificationsWidget from "./widgets/Notifications";
-import StaffPerformanceWidget from "./widgets/StaffPerformance";
-import PendingDocumentsWidget from "./widgets/PendingDocuments";
-
-/* ================= MOCK DATA (TEMP ONLY) ================= */
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import {
-  stats,
-  urgentDeadlines,
-  upcomingHearings,
-  notifications,
-  staffPerformance,
-} from "./data/dashboardData";
+  Bot,
+  Briefcase,
+  Calendar,
+  AlertTriangle,
+  MessageSquare,
+} from "lucide-react";
 
-export default function SecretaryDashboard() {
+/* =========================================================
+   LOCAL DATA
+========================================================= */
+import { clientDashboardMock } from "./data/dashboardData";
+
+/* =========================================================
+   EXISTING WIDGETS ONLY
+========================================================= */
+import CaseSummaryCard from "./widgets/CaseSummaryCard";
+import UpcomingEventsCard from "./widgets/UpcomingEventsCard";
+import AIAssistantPanel from "./widgets/AIAssistantPanel";
+import AlertsPanel from "./widgets/AlertsPanel";
+import CaseChatPreview from "./widgets/CaseChatPreview";
+
+export default function ClientDashboard() {
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDashboard(clientDashboardMock);
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="p-6 text-white animate-pulse">
+        Loading your legal dashboard...
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8">
-      {/* ================= HEADER ================= */}
-      <SectionHeading
-        title="Dashboard Overview"
-        subtitle="Monitor firm performance, manage cases, and track operations in real time."
-      />
+    <div className="p-6 space-y-6">
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex justify-between items-center"
+      >
+        <div>
+          <h1 className="text-2xl font-bold text-white">
+            Your Legal Dashboard
+          </h1>
 
-      {/* ================= TOP STATS ================= */}
-      <StatsWidget stats={stats} />
+          <p className="text-white/60 text-sm">
+            Case tracking, AI guidance, and communication hub
+          </p>
+        </div>
 
-      {/* ================= MAIN GRID (CONTROL PANEL) ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* DEADLINES */}
-        <DeadlinesWidget deadlines={urgentDeadlines} />
+        <div className="flex items-center gap-2 text-yellow-400">
+          <Bot size={18} />
+          <span className="text-sm">AI Assistant Active</span>
+        </div>
+      </motion.div>
 
-        {/* HEARINGS */}
-        <HearingsWidget hearings={upcomingHearings} />
-        {/* PENDING DOCUMENTS */}
-        <PendingDocumentsWidget />
+      {/* =====================================================
+          KPI STRIP
+      ===================================================== */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white/5 p-4 rounded-xl">
+          <Briefcase className="text-blue-400" />
+
+          <p className="text-white text-lg font-bold mt-2">
+            {dashboard?.stats?.activeCases || 0}
+          </p>
+
+          <p className="text-white/50 text-xs">Active Cases</p>
+        </div>
+
+        <div className="bg-white/5 p-4 rounded-xl">
+          <Calendar className="text-green-400" />
+
+          <p className="text-white text-lg font-bold mt-2">
+            {dashboard?.stats?.upcomingEvents || 0}
+          </p>
+
+          <p className="text-white/50 text-xs">Upcoming Events</p>
+        </div>
+
+        <div className="bg-white/5 p-4 rounded-xl">
+          <MessageSquare className="text-purple-400" />
+
+          <p className="text-white text-lg font-bold mt-2">
+            {dashboard?.stats?.messages || 0}
+          </p>
+
+          <p className="text-white/50 text-xs">Messages</p>
+        </div>
+
+        <div className="bg-white/5 p-4 rounded-xl">
+          <AlertTriangle className="text-red-400" />
+
+          <p className="text-white text-lg font-bold mt-2">
+            {dashboard?.stats?.alerts || 0}
+          </p>
+
+          <p className="text-white/50 text-xs">Alerts</p>
+        </div>
       </div>
 
-      {/* ================= PERFORMANCE + DOCS ================= */}
+      {/* =====================================================
+          MAIN GRID
+      ===================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* NOTIFICATIONS */}
-        <NotificationsWidget notifications={notifications} />
-        {/* STAFF PERFORMANCE (BIG SECTION) */}
-        <div className="lg:col-span-2">
-          <StaffPerformanceWidget data={staffPerformance} />
+        {/* LEFT */}
+        <div className="space-y-6">
+          <CaseSummaryCard caseData={dashboard?.case} />
+
+          <UpcomingEventsCard events={dashboard?.upcomingEvents} />
+        </div>
+
+        {/* CENTER */}
+        <div className="space-y-6">
+          <CaseChatPreview caseId={dashboard?.case?.id} />
+        </div>
+
+        {/* RIGHT */}
+        <div className="space-y-6">
+          <AIAssistantPanel caseData={dashboard?.case} />
+
+          <AlertsPanel alerts={dashboard?.alerts} />
         </div>
       </div>
     </div>
