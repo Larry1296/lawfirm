@@ -6,73 +6,51 @@ export default function SectionHeading({
   subtitle,
   align = "center",
   className = "",
+
+  // 👇 NEW: allow explicit control (IMPORTANT)
+  variant, // "dark" | "light" | undefined (auto)
 }) {
-  const { theme } = useContext(ThemeContext);
+  const context = useContext(ThemeContext);
+  const theme = context?.theme || "dark";
+
+  // final mode = prop overrides context
+  const mode = variant || theme;
 
   const alignStyles = {
     center: "text-center mx-auto",
     left: "text-left",
   };
 
-  const titleClasses =
-    theme === "dark"
-      ? "text-[color:var(--text-primary-dark)]"
-      : "text-[color:var(--brand-primary)]";
+  const titleColor = mode === "dark" ? "text-white" : "text-gray-900";
 
-  const subtitleClasses =
-    theme === "dark" ? "text-[color:var(--text-muted-dark)]" : "text-gray-600";
-
-  const underlineClasses =
-    theme === "dark"
-      ? "bg-[color:var(--brand-accent)] shadow-[0_3px_0_rgba(251,191,36,0.3)]"
-      : "bg-[color:var(--brand-primary)] shadow-[0_3px_0_rgba(29,78,216,0.3)]";
+  const subtitleColor = mode === "dark" ? "text-gray-300" : "text-gray-600";
 
   return (
     <div className={`max-w-3xl mb-16 ${alignStyles[align]} ${className}`}>
-      {/* ================= TITLE ================= */}
+      {/* TITLE */}
       <h2
-        className={`
-          text-4xl font-bold
-          relative inline-block
-          transform-gpu
-          ${titleClasses}
-        `}
+        className={`text-4xl font-bold relative inline-block ${titleColor}`}
         style={{
           textShadow:
-            theme === "dark"
-              ? `
-                0 1px 0 rgba(255,255,255,0.04),
-                0 2px 0 rgba(255,255,255,0.03),
-                0 6px 12px rgba(0,0,0,0.45)
-              `
-              : `
-                0 1px 0 #1d4ed8,
-                0 2px 0 #1e40af,
-                0 3px 0 rgba(0,0,0,0.08),
-                0 6px 12px rgba(0,0,0,0.12)
-              `,
+            mode === "dark"
+              ? "0 6px 16px rgba(0,0,0,0.5)"
+              : "0 2px 8px rgba(0,0,0,0.12)",
         }}
       >
         {title}
 
-        {/* ================= UNDERLINE ================= */}
+        {/* underline */}
         <span
-          className={`
-            block h-[4px] w-16 mt-3 rounded-full
-            mx-auto
-            ${underlineClasses}
-          `}
+          className="
+          block h-[4px] w-16 mt-3 rounded-full mx-auto
+          bg-gradient-to-r from-blue-500 to-indigo-500
+        "
         />
       </h2>
 
-      {/* ================= SUBTITLE ================= */}
+      {/* SUBTITLE */}
       {subtitle && (
-        <p
-          className={`
-            mt-5 text-lg leading-relaxed
-            ${subtitleClasses}
-          `}
-        >
+        <p className={`mt-5 text-lg leading-relaxed ${subtitleColor}`}>
           {subtitle}
         </p>
       )}

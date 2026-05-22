@@ -17,37 +17,37 @@ export default function HomePage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="pt-20">
+      <section id="about">
         <AboutSection />
       </section>
 
       {/* Services / Offerings */}
-      <section id="services" className="pt-20">
+      <section id="services">
         <ServicesSection />
       </section>
 
       {/* How It Works / Steps */}
-      <section id="how-it-works" className="pt-20">
+      <section id="how-it-works">
         <HowItWorks />
       </section>
 
       {/* Features / Highlights */}
-      <section id="features" className="pt-20">
+      <section id="features">
         <FeaturesSection />
       </section>
 
       {/* Call to Action */}
-      <section id="cta" className="pt-20">
+      <section id="cta">
         <CTASection />
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="pt-20">
+      <section id="testimonials">
         <Testimonials />
       </section>
 
       {/* Contact / Footer */}
-      <section id="contact" className="pt-20 pb-20">
+      <section id="contact">
         <ContactSection />
       </section>
     </div>
