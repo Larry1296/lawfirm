@@ -1,18 +1,17 @@
-// src/layouts/public/PublicNavbar.jsx
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
-import NavLink from "../../components/ui/NavLink";
+import NavLink from "../../components/ui/Navlink";
 import Button3D from "../../components/ui/Button3D";
 
 const links = [
   { id: "home", label: "Home" },
-  { id: "features", label: "Features" },
-  { id: "how-it-works", label: "How It Works" },
+  { id: "about", label: "About" },
   { id: "services", label: "Services" },
+  { id: "how-it-works", label: "How It Works" },
+  { id: "features", label: "Features" },
   { id: "testimonials", label: "Reviews" },
   { id: "contact", label: "Contact" },
-  { id: "about", label: "About" },
 ];
 
 export default function PublicNavbar() {
@@ -35,7 +34,6 @@ export default function PublicNavbar() {
 
       links.forEach((section) => {
         const el = document.getElementById(section.id);
-
         if (!el) return;
 
         const rect = el.getBoundingClientRect();
@@ -47,20 +45,13 @@ export default function PublicNavbar() {
 
       setActive(current);
 
-      // Close mobile menu while scrolling
-      if (menuOpen) {
-        setMenuOpen(false);
-      }
+      if (menuOpen) setMenuOpen(false);
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [menuOpen]);
 
-  // Smooth scroll to section
   const handleScrollTo = (id) => {
     const el = document.getElementById(id);
 
@@ -87,7 +78,6 @@ export default function PublicNavbar() {
             border border-[color:var(--border-light)]
             shadow-[0_12px_36px_rgba(0,0,0,0.25)]
             backdrop-blur-xl
-            transition-all duration-300
           "
         >
           {/* Logo */}
@@ -98,15 +88,7 @@ export default function PublicNavbar() {
               className="h-16 w-16 md:h-20 md:w-20 rounded-2xl object-cover border border-white/20"
             />
 
-            <span
-              className="
-                text-white
-                font-extrabold
-                text-xl md:text-2xl
-                tracking-wide
-                [text-shadow:0_2px_10px_rgba(0,0,0,0.8)]
-              "
-            >
+            <span className="text-white font-extrabold text-xl md:text-2xl tracking-wide">
               Sheria Desk
             </span>
           </div>
@@ -115,27 +97,31 @@ export default function PublicNavbar() {
           {!isAuthPage && (
             <div className="hidden lg:flex items-center gap-6">
               {links.map((link) => (
-                <NavLink
-                  key={link.id}
-                  label={link.label}
-                  active={active === link.id}
-                  onClick={() => handleScrollTo(link.id)}
-                  className={`
-                    relative
-                    text-white
-                    font-extrabold
-                    tracking-wide
-                    text-sm xl:text-base
-                    transition-all duration-300
-                    hover:text-[color:var(--brand-accent)]
-                    [text-shadow:0_2px_8px_rgba(0,0,0,0.8)]
-                    ${
-                      active === link.id
-                        ? "text-[color:var(--brand-accent)]"
-                        : ""
-                    }
-                  `}
-                />
+                <div key={link.id} className="relative group">
+                  <NavLink
+                    label={link.label}
+                    onClick={() => handleScrollTo(link.id)}
+                    className="
+                      relative
+                      text-white
+                      font-extrabold
+                      tracking-wide
+                      text-sm xl:text-base
+                      transition-all duration-300
+                      hover:text-[color:var(--brand-accent)]
+                    "
+                  />
+
+                  {/* Active underline */}
+                  <span
+                    className={`
+                      absolute left-0 -bottom-1 h-[2px] w-full
+                      bg-[color:var(--brand-accent)]
+                      transition-transform duration-300
+                      ${active === link.id ? "scale-x-100" : "scale-x-0"}
+                    `}
+                  />
+                </div>
               ))}
 
               {/* CTA Button */}
@@ -151,32 +137,17 @@ export default function PublicNavbar() {
           {!isAuthPage && (
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="
-                lg:hidden
-                flex flex-col gap-1.5
-                p-2
-              "
+              className="lg:hidden flex flex-col gap-1.5 p-2"
               aria-label="Toggle menu"
             >
               <span
-                className={`
-                  w-7 h-0.5 bg-white rounded-full transition-all duration-300
-                  ${menuOpen ? "rotate-45 translate-y-2" : ""}
-                `}
+                className={`w-7 h-0.5 bg-white rounded-full transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
               />
-
               <span
-                className={`
-                  w-7 h-0.5 bg-white rounded-full transition-all duration-300
-                  ${menuOpen ? "opacity-0" : ""}
-                `}
+                className={`w-7 h-0.5 bg-white rounded-full transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
               />
-
               <span
-                className={`
-                  w-7 h-0.5 bg-white rounded-full transition-all duration-300
-                  ${menuOpen ? "-rotate-45 -translate-y-2" : ""}
-                `}
+                className={`w-7 h-0.5 bg-white rounded-full transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
               />
             </button>
           )}
@@ -185,57 +156,44 @@ export default function PublicNavbar() {
 
       {/* Mobile Menu */}
       {!isAuthPage && menuOpen && (
-        <div
-          className="
-            fixed inset-0 z-40
-            flex flex-col items-center justify-center
-            bg-[color:var(--brand-primary)]
-            text-white
-            transition-all duration-300
-          "
-        >
-          {/* Close Button */}
+        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[color:var(--brand-primary)] text-white">
+          {/* Close */}
           <button
             onClick={() => setMenuOpen(false)}
-            className="
-              absolute top-6 right-6
-              text-4xl
-              font-bold
-              text-white
-              hover:text-[color:var(--brand-accent)]
-              transition-colors duration-200
-            "
+            className="absolute top-6 right-6 text-4xl font-bold hover:text-[color:var(--brand-accent)]"
           >
             ✕
           </button>
 
-          {/* Mobile Links */}
-          <div className="flex flex-col items-center gap-8 px-6 w-full max-w-md">
+          {/* Links */}
+          <div className="flex flex-col items-center gap-8 w-full max-w-md px-6">
             {links.map((link) => (
-              <NavLink
-                key={link.id}
-                label={link.label}
-                active={active === link.id}
-                onClick={() => handleScrollTo(link.id)}
-                className={`
-                  text-white
-                  text-2xl
-                  font-extrabold
-                  uppercase
-                  tracking-widest
-                  transition-all duration-300
-                  hover:text-[color:var(--brand-accent)]
-                  [text-shadow:0_2px_10px_rgba(0,0,0,0.9)]
-                  ${
-                    active === link.id
-                      ? "text-[color:var(--brand-accent)] scale-105"
-                      : ""
-                  }
-                `}
-              />
+              <div key={link.id} className="relative">
+                <NavLink
+                  label={link.label}
+                  onClick={() => handleScrollTo(link.id)}
+                  className="
+                    text-white
+                    text-2xl
+                    font-extrabold
+                    uppercase
+                    tracking-widest
+                    hover:text-[color:var(--brand-accent)]
+                  "
+                />
+
+                {/* Active underline */}
+                <span
+                  className={`
+                    absolute left-0 -bottom-1 h-[2px] w-full
+                    bg-[color:var(--brand-accent)]
+                    transition-transform duration-300
+                    ${active === link.id ? "scale-x-100" : "scale-x-0"}
+                  `}
+                />
+              </div>
             ))}
 
-            {/* CTA Button */}
             <div className="w-full pt-4">
               <Button3D
                 label="Get Started"

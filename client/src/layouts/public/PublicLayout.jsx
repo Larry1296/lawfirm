@@ -5,11 +5,16 @@ import Footer from "../../components/shared/Footer";
 
 const PublicLayout = () => {
   return (
-    <div className="public-layout">
+    <div className="min-h-screen bg-[#050816] text-white flex flex-col">
+      {/* Navbar */}
       <PublicNavbar />
-      <main className="pt-20">
-        <Outlet /> {/* Render the current route's page here */}
+
+      {/* Page content */}
+      <main className="pt-20 flex-1">
+        <Outlet />
       </main>
+
+      {/* Footer */}
       <Footer />
     </div>
   );

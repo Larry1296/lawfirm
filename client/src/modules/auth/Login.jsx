@@ -184,7 +184,15 @@ export default function Login() {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center py-10 px-6 lg:p-8 bg-gray-50">
+      <div
+        className="
+        w-full lg:w-1/2
+        flex items-center justify-center
+        min-h-screen lg:min-h-0
+        px-6 py-24 lg:px-10
+        bg-gray-50
+          "
+      >
         <Card className="w-full max-w-md p-8">
           {/* BACK LINK */}
           <Link
@@ -199,7 +207,7 @@ export default function Login() {
           <div className="flex items-center gap-2 mb-6">
             <Lock className="text-blue-600" />
 
-            <h2 className="text-2xl font-bold">Login</h2>
+            <h4 className="text-3xl font-bold text-gray-800">Login</h4>
           </div>
 
           {/* FORM */}
@@ -220,14 +228,14 @@ export default function Login() {
 
             {/* OPTIONS */}
             <div className="flex justify-between text-sm">
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 text-gray-800">
                 <input type="checkbox" />
                 Remember me
               </label>
 
               <Link
                 to="/forgot-password"
-                className="text-blue-600 hover:underline"
+                className="text-blue-700 hover:underline"
               >
                 Forgot password?
               </Link>
@@ -245,9 +253,18 @@ export default function Login() {
             </Button3D>
 
             {/* REGISTER LINK */}
-            <p className="text-sm text-center mt-4">
+            <p className="text-sm text-center mt-6 text-gray-600">
               Don’t have an account?{" "}
-              <Link to="/register" className="text-blue-600 font-semibold">
+              <Link
+                to="/register"
+                className="
+                    whitespace-nowrap
+                    text-blue-600
+                    font-bold
+                    hover:text-blue-700
+                    transition-colors duration-200
+                  "
+              >
                 Create account
               </Link>
             </p>
