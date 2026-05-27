@@ -1,20 +1,20 @@
 // src/modules/auth/Login.jsx
 
-import { useState, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ShieldCheck, Lock, ArrowLeft } from "lucide-react";
+import { useState, useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ShieldCheck, Lock, ArrowLeft } from 'lucide-react';
 
-import { login } from "../../services/usersApi";
-import AuthContext from "../../core/store/AuthContext";
+import { login } from '../../services/usersApi';
+import AuthContext from '../../core/store/AuthContext';
 
-import Card from "../../components/ui/Card";
-import Button3D from "../../components/ui/Button3D";
-import FloatingInput from "../../components/ui/FloatingInput";
+import Card from '../../components/ui/Card';
+import Button3D from '../../components/ui/Button3D';
+import FloatingInput from '../../components/ui/FloatingInput';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -39,7 +39,7 @@ export default function Login() {
 
       // INVALID RESPONSE
       if (!data) {
-        setError(res.data?.message || "Login failed");
+        setError(res.data?.message || 'Login failed');
         return;
       }
 
@@ -47,7 +47,7 @@ export default function Login() {
 
       // INVALID USER DATA
       if (!user || !access) {
-        setError("Invalid login response from server.");
+        setError('Invalid login response from server.');
         return;
       }
 
@@ -68,47 +68,47 @@ export default function Login() {
       // =========================
       // ADMIN
       // =========================
-      if (role === "ADMIN") {
-        navigate("/admin/dashboard");
+      if (role === 'ADMIN') {
+        navigate('/admin/dashboard');
       }
 
       // =========================
       // CLIENTS
       // =========================
-      else if (role === "CLIENT") {
+      else if (role === 'CLIENT') {
         // SELF-REGISTERED PUBLIC CLIENT
         if (!firmRole) {
-          navigate("/portal/dashboard");
+          navigate('/portal/dashboard');
         }
 
         // FIRM CLIENT
-        else if (firmRole === "CLIENT") {
-          navigate("/client/dashboard");
+        else if (firmRole === 'CLIENT') {
+          navigate('/client/dashboard');
         }
 
         // FALLBACK
         else {
-          navigate("/");
+          navigate('/');
         }
       }
 
       // =========================
       // STAFF
       // =========================
-      else if (role === "STAFF") {
+      else if (role === 'STAFF') {
         // LAWYER
-        if (firmRole === "LAWYER") {
-          navigate("/lawyer/dashboard");
+        if (firmRole === 'LAWYER') {
+          navigate('/lawyer/dashboard');
         }
 
         // SECRETARY
-        else if (firmRole === "SECRETARY") {
-          navigate("/secretary/dashboard");
+        else if (firmRole === 'SECRETARY') {
+          navigate('/secretary/dashboard');
         }
 
         // UNKNOWN STAFF TYPE
         else {
-          navigate("/");
+          navigate('/');
         }
       }
 
@@ -116,13 +116,13 @@ export default function Login() {
       // UNKNOWN ROLE
       // =========================
       else {
-        navigate("/");
+        navigate('/');
       }
     } catch (err) {
-      console.error("Login failed:", err);
+      console.error('Login failed:', err);
 
       setError(
-        err.response?.data?.message || "Login failed. Please try again.",
+        err.response?.data?.message || 'Login failed. Please try again.',
       );
     } finally {
       setLoading(false);
@@ -130,9 +130,9 @@ export default function Login() {
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row">
+    <div className='flex-1 flex flex-col lg:flex-row'>
       {/* LEFT PANEL */}
-      <div className="hidden lg:flex lg:w-1/2 bg-blue-700 relative items-center justify-center p-10 overflow-hidden">
+      <div className='hidden lg:flex lg:w-1/2 bg-blue-700 relative items-center justify-center p-10 overflow-hidden'>
         {/* Animated Background Circles */}
         <motion.div
           animate={{
@@ -144,7 +144,7 @@ export default function Login() {
             duration: 8,
             repeat: Infinity,
           }}
-          className="absolute w-96 h-96 bg-blue-500/40 rounded-full blur-3xl"
+          className='absolute w-96 h-96 bg-blue-500/40 rounded-full blur-3xl'
         />
 
         <motion.div
@@ -157,11 +157,11 @@ export default function Login() {
             duration: 10,
             repeat: Infinity,
           }}
-          className="absolute w-96 h-96 bg-indigo-400/30 rounded-full blur-3xl"
+          className='absolute w-96 h-96 bg-indigo-400/30 rounded-full blur-3xl'
         />
 
         {/* Branding Content */}
-        <div className="relative text-center text-white max-w-md">
+        <div className='relative text-center text-white max-w-md'>
           <motion.div
             animate={{
               rotate: [0, 10, -10, 0],
@@ -170,14 +170,14 @@ export default function Login() {
               duration: 6,
               repeat: Infinity,
             }}
-            className="flex justify-center mb-6"
+            className='flex justify-center mb-6'
           >
             <ShieldCheck size={90} />
           </motion.div>
 
-          <h1 className="text-4xl font-bold mb-4">Secure Legal Access</h1>
+          <h1 className='text-4xl font-bold mb-4'>Secure Legal Access</h1>
 
-          <p className="text-blue-100">
+          <p className='text-blue-100'>
             Login to manage cases, documents, and communication securely.
           </p>
         </div>
@@ -185,57 +185,57 @@ export default function Login() {
 
       {/* RIGHT PANEL */}
       <div
-        className="
+        className='
         w-full lg:w-1/2
         flex items-center justify-center
         min-h-screen lg:min-h-0
         px-6 py-24 lg:px-10
         bg-gray-50
-          "
+          '
       >
-        <Card className="w-full max-w-md p-8">
+        <Card className='w-full max-w-md p-8'>
           {/* BACK LINK */}
           <Link
-            to="/"
-            className="flex items-center gap-2 text-sm text-blue-600 mb-6 hover:underline"
+            to='/'
+            className='flex items-center gap-2 text-sm text-blue-600 mb-6 hover:underline'
           >
             <ArrowLeft size={16} />
             Back to Home
           </Link>
 
           {/* HEADING */}
-          <div className="flex items-center gap-2 mb-6">
-            <Lock className="text-blue-600" />
+          <div className='flex items-center gap-2 mb-6'>
+            <Lock className='text-blue-600' />
 
-            <h4 className="text-3xl font-bold text-gray-800">Login</h4>
+            <h2 className='text-2xl font-bold text-gray-900'>Login</h2>
           </div>
 
           {/* FORM */}
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className='space-y-5'>
             <FloatingInput
-              label="Email"
-              type="email"
+              label='Email'
+              type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
 
             <FloatingInput
-              label="Password"
-              type="password"
+              label='Password'
+              type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
 
             {/* OPTIONS */}
-            <div className="flex justify-between text-sm">
-              <label className="flex items-center gap-2 text-gray-800">
-                <input type="checkbox" />
+            <div className='flex justify-between text-sm'>
+              <label className='flex items-center gap-2 text-gray-800'>
+                <input type='checkbox' />
                 Remember me
               </label>
 
               <Link
-                to="/forgot-password"
-                className="text-blue-700 hover:underline"
+                to='/forgot-password'
+                className='text-blue-700 hover:underline'
               >
                 Forgot password?
               </Link>
@@ -243,27 +243,27 @@ export default function Login() {
 
             {/* SUBMIT BUTTON */}
             <Button3D
-              type="submit"
-              className="w-full"
-              variant="primary"
-              size="lg"
+              type='submit'
+              className='w-full'
+              variant='primary'
+              size='lg'
               disabled={loading}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? 'Logging in...' : 'Login'}
             </Button3D>
 
             {/* REGISTER LINK */}
-            <p className="text-sm text-center mt-6 text-gray-600">
-              Don’t have an account?{" "}
+            <p className='text-sm text-center mt-6 text-gray-600'>
+              Don’t have an account?{' '}
               <Link
-                to="/register"
-                className="
+                to='/register'
+                className='
                     whitespace-nowrap
                     text-blue-600
                     font-bold
                     hover:text-blue-700
                     transition-colors duration-200
-                  "
+                  '
               >
                 Create account
               </Link>
@@ -271,7 +271,7 @@ export default function Login() {
 
             {/* ERROR */}
             {error && (
-              <p className="text-red-500 text-center text-sm mt-2">{error}</p>
+              <p className='text-red-500 text-center text-sm mt-2'>{error}</p>
             )}
           </form>
         </Card>

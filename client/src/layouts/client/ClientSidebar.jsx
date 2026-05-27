@@ -73,7 +73,7 @@ export default function ClientSidebar({ onClose }) {
       {/* HEADER */}
       <div className='relative py-3 px-5 border-b border-white/10'>
         <div className='flex items-center justify-center'>
-          <Brand size='h-16 w-16' showText={false} />
+          <Brand size='h-14 w-14' showText />
         </div>
 
         <button

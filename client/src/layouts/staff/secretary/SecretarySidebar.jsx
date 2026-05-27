@@ -54,7 +54,7 @@ export default function SecretarySidebar({ onClose }) {
       {/* HEADER */}
       <div className='relative py-4 px-5 border-b border-white/10'>
         <div className='flex items-center justify-center'>
-          <Brand size='h-16 w-16' showText />
+          <Brand size='h-14 w-14' showText />
         </div>
 
         <button
