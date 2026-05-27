@@ -1,5 +1,14 @@
 import { useContext } from 'react';
-import { X, LayoutDashboard, Users, FileText } from 'lucide-react';
+import {
+  X,
+  LayoutDashboard,
+  Users,
+  FileText,
+  Calendar,
+  Briefcase,
+  MessageSquare,
+  Bell,
+} from 'lucide-react';
 import ThemeContext from '../../core/store/ThemeContext';
 import LogoutButton from '../../components/ui/LogoutButton';
 import SidebarNavLink from '../../components/ui/SidebarNavLink';
@@ -13,9 +22,29 @@ const links = [
     end: true,
   },
   {
+    name: 'Calendar',
+    path: '/client/calendar',
+    icon: <Calendar size={18} />,
+  },
+  {
+    name: 'Cases',
+    path: '/client/cases',
+    icon: <Briefcase size={18} />,
+  },
+  {
+    name: 'Communication',
+    path: '/client/communication',
+    icon: <MessageSquare size={18} />,
+  },
+  {
     name: 'Documents',
     path: '/client/documents',
     icon: <FileText size={18} />,
+  },
+  {
+    name: 'Notifications',
+    path: '/client/notifications',
+    icon: <Bell size={18} />,
   },
   {
     name: 'Profile',

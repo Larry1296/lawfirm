@@ -53,6 +53,9 @@ import AdminStaffDetailsPage from '../modules/admin/staff/pages/AdminStaffDetail
 
 import AdminCalendarPage from '../modules/admin/calendar/pages/AdminCalendarPage';
 
+import AdminHearingsPage from '../modules/admin/hearings/pages/AdminHearingsPage';
+import AdminHearingDetailsPage from '../modules/admin/hearings/pages/AdminHearingDetailsPage';
+
 import AdminDocumentsPage from '../modules/admin/documents/pages/AdminDocumentsPage';
 
 import AdminBillingPage from '../modules/admin/billing/pages/AdminBillingPage';
@@ -84,6 +87,9 @@ import LawyerClientProfile from '../modules/staff/lawyer/clients/pages/LawyerCli
 
 import LawyerChat from '../modules/staff/lawyer/communication/pages/LawyerChatPage';
 import LawyerNotifications from '../modules/staff/lawyer/communication/pages/LawyerNotificationsPage';
+
+import LawyerDocumentsPage from '../modules/staff/lawyer/documents/pages/LawyerDocumentsPage';
+import LawyerTemplatesPage from '../modules/staff/lawyer/documents/pages/LawyerTemplatesPage';
 
 import LawyerHearings from '../modules/staff/lawyer/hearings/pages/LawyerHearingsPage';
 import LawyerHearingDetails from '../modules/staff/lawyer/hearings/pages/LawyerHearingDetailsPage';
@@ -121,6 +127,11 @@ import SecretaryCalendar from '../modules/staff/secretary/calendar/pages/Secreta
 import ClientDashboard from '../modules/client/dashboard/pages/ClientDashboardPage';
 import ClientDocuments from '../modules/client/documents/pages/ClientDocumentsPage';
 import ClientProfile from '../modules/client/profile/pages/ClientProfilePage';
+import ClientCalendarPage from '../modules/client/calendar/pages/ClientCalendarPage';
+import ClientCasesPage from '../modules/client/cases/pages/ClientCasesPage';
+import ClientCommunicationPage from '../modules/client/communication/pages/ClientCommunicationPage';
+
+import ClientNotificationsPage from '../modules/client/notifications/pages/ClientNotificationsPage';
 
 /* =========================================================
    PORTAL
@@ -147,6 +158,8 @@ import BecomeClient from '../modules/portal/onboarding/BecomeClient';
 import FirmMembershipStatus from '../modules/portal/onboarding/FirmMembershipStatus';
 
 import PortalProfile from '../modules/portal/profile/PortalProfile';
+import LawyerCalendar from '../modules/staff/lawyer/calendar/pages/LawyerCalendar';
+import AdminVirtualCourtroomPage from '../modules/admin/hearings/pages/AdminVirtualCourtroomPage';
 
 /* =========================================================
    ROUTER
@@ -182,6 +195,8 @@ const AppRoutes = () => {
         <Route path='dashboard' element={<AdminDashboard />} />
         <Route path='cases' element={<AdminCasesPage />} />
         <Route path='cases/:id' element={<AdminCaseDetailsPage />} />
+        <Route path='hearings' element={<AdminHearingsPage />} />
+        <Route path='hearings/:id' element={<AdminHearingDetailsPage />} />
         <Route path='clients' element={<AdminClientsPage />} />
         <Route path='clients/:id' element={<AdminClientDetailsPage />} />
         <Route path='staff' element={<AdminStaffPage />} />
@@ -210,6 +225,7 @@ const AppRoutes = () => {
       >
         <Route path='' element={<Navigate to='dashboard' replace />} />
         <Route path='dashboard' element={<LawyerDashboard />} />
+        <Route path='calendar' element={<LawyerCalendar />} />
         <Route path='ai' element={<LawyerAI />} />
         <Route path='research-ai' element={<LawyerResearchAI />} />
         <Route path='cases' element={<LawyerCases />} />
@@ -217,6 +233,8 @@ const AppRoutes = () => {
         <Route path='cases/:id' element={<LawyerCaseDetails />} />
         <Route path='clients' element={<LawyerClients />} />
         <Route path='clients/:id' element={<LawyerClientProfile />} />
+        <Route path='documents' element={<LawyerDocumentsPage />} />
+        <Route path='documents/:id' element={<LawyerTemplatesPage />} />
         <Route path='chat' element={<LawyerChat />} />
         <Route path='notifications' element={<LawyerNotifications />} />
         <Route path='hearings' element={<LawyerHearings />} />
@@ -263,8 +281,26 @@ const AppRoutes = () => {
         }
       >
         <Route path='' element={<Navigate to='dashboard' replace />} />
+
+        {/* DASHBOARD */}
         <Route path='dashboard' element={<ClientDashboard />} />
+
+        {/* CALENDAR */}
+        <Route path='calendar' element={<ClientCalendarPage />} />
+
+        {/* CASES */}
+        <Route path='cases' element={<ClientCasesPage />} />
+
+        {/* COMMUNICATION */}
+        <Route path='communication' element={<ClientCommunicationPage />} />
+
+        {/* DOCUMENTS */}
         <Route path='documents' element={<ClientDocuments />} />
+
+        {/* NOTIFICATIONS */}
+        <Route path='notifications' element={<ClientNotificationsPage />} />
+
+        {/* PROFILE */}
         <Route path='profile' element={<ClientProfile />} />
       </Route>
 

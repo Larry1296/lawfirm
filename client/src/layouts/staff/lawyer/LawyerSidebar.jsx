@@ -35,9 +35,7 @@ const links = [
   { name: 'Billing', path: '/lawyer/billing', icon: CreditCard },
   { name: 'Reports', path: '/lawyer/reports', icon: BarChart },
 
-  { name: 'Communication', path: '/lawyer/communication', icon: MessageSquare },
-
-  { name: 'Settings', path: '/lawyer/settings', icon: Settings },
+  { name: 'Communication', path: '/lawyer/chat', icon: MessageSquare },
 ];
 
 export default function LawyerSidebar({ onClose }) {

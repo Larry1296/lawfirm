@@ -11,6 +11,7 @@ import {
   Settings,
   HomeIcon,
   UserCog,
+  Scale,
 } from 'lucide-react';
 
 export const adminSidebarLinks = [
@@ -20,9 +21,9 @@ export const adminSidebarLinks = [
     icon: LayoutDashboard,
     end: true,
   },
-  { name: 'Home Page', path: '/admin/homepagecustomization', icon: HomeIcon },
 
   { name: 'Cases', path: '/admin/cases', icon: Briefcase },
+  { name: 'Hearings', path: '/admin/hearings', icon: Scale },
   { name: 'Clients', path: '/admin/clients', icon: Users },
   { name: 'Staff', path: '/admin/staff', icon: UserCog },
   { name: 'Calendar', path: '/admin/calendar', icon: Calendar },
