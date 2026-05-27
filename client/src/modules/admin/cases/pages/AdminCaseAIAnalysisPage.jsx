@@ -1,5 +1,3 @@
-const AdminCaseAIAnalysisPage = () => {
+export default function AdminCaseAIAnalysisPage() {
   return <div>Admin Calendar Page</div>;
-};
-
-export default AdminCaseAIAnalysisPage;
+}

@@ -1,5 +1,3 @@
-const AdminCreateCasePage = () => {
+export default function AdminCreateCasePage() {
   return <div>Admin Case creation Page</div>;
-};
-
-export default AdminCreateCasePage;
+}

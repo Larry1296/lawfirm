@@ -1,5 +1,3 @@
-const AdminAuditLogsPage = () => {
+export default function AdminAuditLogsPage() {
   return <div>Admin Audit Logs Page</div>;
-};
-
-export default AdminAuditLogsPage;
+}

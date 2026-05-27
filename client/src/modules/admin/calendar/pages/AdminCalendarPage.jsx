@@ -1,5 +1,3 @@
-const AdminCalendarPage = () => {
+export default function AdminCalendarPage() {
   return <div>Admin Calendar Page</div>;
-};
-
-export default AdminCalendarPage;
+}

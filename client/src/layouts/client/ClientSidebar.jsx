@@ -1,20 +1,5 @@
 import { useContext } from 'react';
-import {
-  X,
-  LayoutDashboard,
-  Briefcase,
-  Users,
-  Calendar,
-  FileText,
-  HomeIcon,
-  CreditCard,
-  BarChart,
-  MessageSquare,
-  ShieldCheck,
-  Settings,
-  UserCog,
-} from 'lucide-react';
-
+import { X, LayoutDashboard, Users, FileText } from 'lucide-react';
 import ThemeContext from '../../core/store/ThemeContext';
 import LogoutButton from '../../components/ui/LogoutButton';
 import SidebarNavLink from '../../components/ui/SidebarNavLink';
@@ -22,35 +7,10 @@ import Brand from '../../components/ui/Brand';
 
 const links = [
   {
-    name: 'Overview',
+    name: 'Dashboard',
     path: '/client/dashboard',
     icon: <LayoutDashboard size={18} />,
     end: true,
-  },
-  {
-    name: 'Home Page',
-    path: '/client/homepagecustomization',
-    icon: <HomeIcon size={18} />,
-  },
-  {
-    name: 'Cases',
-    path: '/client/cases',
-    icon: <Briefcase size={18} />,
-  },
-  {
-    name: 'Clients',
-    path: '/client/clients',
-    icon: <Users size={18} />,
-  },
-  {
-    name: 'Staff',
-    path: '/client/staff',
-    icon: <UserCog size={18} />,
-  },
-  {
-    name: 'Calendar',
-    path: '/client/calendar',
-    icon: <Calendar size={18} />,
   },
   {
     name: 'Documents',
@@ -58,29 +18,9 @@ const links = [
     icon: <FileText size={18} />,
   },
   {
-    name: 'Billing',
-    path: '/client/billing',
-    icon: <CreditCard size={18} />,
-  },
-  {
-    name: 'Reports',
-    path: '/client/reports',
-    icon: <BarChart size={18} />,
-  },
-  {
-    name: 'Communication',
-    path: '/client/communication',
-    icon: <MessageSquare size={18} />,
-  },
-  {
-    name: 'Compliance',
-    path: '/client/compliance',
-    icon: <ShieldCheck size={18} />,
-  },
-  {
-    name: 'Settings',
-    path: '/client/settings',
-    icon: <Settings size={18} />,
+    name: 'Profile',
+    path: '/client/profile',
+    icon: <Users size={18} />,
   },
 ];
 

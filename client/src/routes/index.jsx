@@ -103,8 +103,6 @@ import LawyerProfile from '../modules/staff/lawyer/profile/pages/LawyerProfilePa
 
 import LawyerSecurity from '../modules/staff/lawyer/security/pages/LawyerSecurityPage';
 
-import LawyerSettings from '../modules/staff/lawyer/settings/pages/LawyerSettingsPage';
-
 /* =========================================================
    SECRETARY
 ========================================================= */
@@ -232,7 +230,6 @@ const AppRoutes = () => {
         <Route path='approvals' element={<LawyerApprovals />} />
         <Route path='profile' element={<LawyerProfile />} />
         <Route path='security' element={<LawyerSecurity />} />
-        <Route path='settings' element={<LawyerSettings />} />
       </Route>
 
       {/* SECRETARY */}
