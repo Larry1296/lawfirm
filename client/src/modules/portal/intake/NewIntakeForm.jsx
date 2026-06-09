@@ -15,7 +15,7 @@ import ThemeContext from "../../../core/store/ThemeContext";
 import Card from "../../../components/ui/Card";
 import Button3D from "../../../components/ui/Button3D";
 import FloatingInput from "../../../components/ui/FloatingInput";
-import { Textarea3D } from "../../../components/ui/Textarea3D";
+import { Textarea3D } from "../../../components/ui/TextArea3D";
 
 export default function NewIntakeForm() {
   const { theme } = useContext(ThemeContext);
